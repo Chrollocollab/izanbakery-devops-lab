@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');
+
+body {
+    zoom: 90% !important;
+}
+
+/* =============================================
+   IZANBAKERY – Warm Bakery Theme Overrides
+   Primary: #BE6A36 (amber/bread brown)
+   Dark:    #97511F (saddle brown)
+   Light:   #FFF8F0 (cream)
+   ============================================= */
+
+/* Primary buttons */
+.btn-primary,
+.tf-button.style-1,
+.tf-button {
+    background-color: #BE6A36 !important;
+    border-color: #BE6A36 !important;
+    color: #fff !important;
+}
+.btn-primary:hover,
+.tf-button.style-1:hover,
+.tf-button:hover {
+    background-color: #97511F !important;
+    border-color: #97511F !important;
+}
+
+/* Icon background in stat cards */
+.ic-bg {
+    background-color: #FFF0DC !important;
+    color: #BE6A36 !important;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ic-bg i {
+    color: #BE6A36 !important;
+    font-size: 22px;
+}
+
+/* Sidebar logo background area accent */
+.section-menu-left {
+    border-right: 1px solid #E8E2D8 !important;
+}
+.section-menu-left .center-heading {
+    color: #BE6A36 !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Active menu item accent */
+.menu-item a:hover .text,
+.menu-item.active a .text {
+    color: #BE6A36 !important;
+}
+
+/* Dashboard welcome banner */
+.bakery-welcome {
+    background: linear-gradient(110deg, #1A1714 0%, #5C3A22 55%, #BE6A36 100%);
+    border-radius: 16px;
+    padding: 24px 30px;
+    color: #fff;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.bakery-welcome h4 {
+    color: #fff;
+    margin: 0 0 4px 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+.bakery-welcome p {
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+    font-size: 14px;
+}
+.bakery-welcome .bakery-icon {
+    font-size: 56px;
+    line-height: 1;
+    opacity: 0.85;
+}
+
+/* Stat card border accent */
+.wg-chart-default {
+    border-left: 4px solid #BE6A36 !important;
+}
+
+/* Table header row */
+.table thead th {
+    background-color: #FAF8F5 !important;
+    color: #5C574F !important;
+    font-weight: 600;
+    border-bottom: 2px solid #E8E2D8 !important;
+}
+
+/* Headings + stat-card tint align with corporate brand */
+.main-content h1, .main-content h2, .main-content h3,
+.main-content h4, .main-content h5,
+.bakery-welcome h4 { font-family: 'Playfair Display', Georgia, serif; }
+.ic-bg { background-color: #F6EBDF !important; }
+.wg-chart-default { border-left: 4px solid #BE6A36 !important; }
+
+/* Badge colour overrides for bakery statuses */
+.badge-info    { background-color: #17a2b8; color: #fff; }
+.badge-primary { background-color: #BE6A36; color: #fff; }
+.badge-warning { background-color: #E8A84C; color: #5C3D11; }
+.badge-success { background-color: #28a745; color: #fff; }
+.badge-danger  { background-color: #dc3545; color: #fff; }
+.badge-secondary { background-color: #6c757d; color: #fff; }
+
+/* Order create – delivery field */
+#deliveryChargeField input:focus,
+.form-control:focus {
+    border-color: #BE6A36 !important;
+    box-shadow: 0 0 0 3px rgba(193, 123, 47, 0.15) !important;
+}
+
+/* Select2 focus / selection */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #BE6A36 !important;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #BE6A36 !important;
+}
+
+/* Bottom footer */
+.bottom-page .body-text {
+    color: #97511F;
+    font-weight: 500;
+}
+
+#logo_header_mobile {
+    max-width: 190px;
+}
+
+.wg-table.table-all-user>* {
+    min-width: 1260px;
+}
+
+.wgp-pagination svg {
+    height: 20px;
+}
+
+.wgp-pagination p {
+    font-size: 16px;
+}
+
+.pagination {
+    margin-left: 30px;
+
+    .page-link {
+        padding: 1.1rem;
+        font-size: 16px;
+    }
+}
+
+.swal-button--confirm {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.swal-button--confirm.active,
+.swal-button--confirm:active,
+.show>.swal-button--confirm.dropdown-toggle,
+.swal-button--confirm:hover {
+    background-color: #b02a37 !important;
+    border-color: #a52834 !important;
+    color: #fff;
+}
+
+.swal-footer {
+    text-align: center;
+}
+
+.table-bordered>:not(caption)>*>* {
+    border-width: inherit;
+    line-height: 32px;
+    font-size: 14px;
+    border: 1px solid #e1e1e1;
+    vertical-align: middle;
+}
+
+.table-striped .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-striped {
+    min-width: 1200px;
+}
+
+.table-striped th:nth-child(2),
+.table-striped td:nth-child(2) {
+    width: 250px;
+    padding-bottom: 18px;
+}
+
+.pname {
+    display: flex;
+    gap: 13px;
+}
+
+.view-icon {
+    width: 20px;
+    margin: 0 auto;
+}
+.wg-table.table-all-user>* {
+    min-width: 1260px;
+}
+
+/* ── Product visibility toggle switch ─────────────────── */
+.visibility-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+.bk-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin: 0;
+}
+.bk-switch__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.bk-switch__slider {
+    position: absolute;
+    inset: 0;
+    background-color: #cfc8be;
+    border-radius: 24px;
+    transition: background-color 0.25s ease;
+}
+.bk-switch__slider::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.25s ease;
+}
+.bk-switch__input:checked + .bk-switch__slider { background-color: #BE6A36; }
+.bk-switch__input:checked + .bk-switch__slider::before { transform: translateX(18px); }
+.bk-switch__input:focus-visible + .bk-switch__slider {
+    box-shadow: 0 0 0 3px rgba(190,106,54,0.25);
+}
+.bk-switch__label { color: #8A847A; font-weight: 600; }
+
+/*------*/
+.wgp-pagination svg {
+    height: 20px;
+}
+
+.wgp-pagination p {
+    font-size: 16px;
+}
+
+.pagination {
+    margin-left: 30px;
+
+    .page-link {
+        padding: 1.1rem;
+        font-size: 16px;
+    }
+}
+
+.swal-button--confirm {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.swal-button--confirm.active,
+.swal-button--confirm:active,
+.show>.swal-button--confirm.dropdown-toggle,
+.swal-button--confirm:hover {
+    background-color: #b02a37 !important;
+    border-color: #a52834 !important;
+    color: #fff;
+}
+
+.swal-footer {
+    text-align: center;
+}
+
+.table-bordered>:not(caption)>*>* {
+    border-width: inherit;
+    line-height: 32px;
+    font-size: 14px;
+    border: 1px solid #e1e1e1;
+    vertical-align: middle;
+}
+
+.table-striped .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-striped {
+    min-width: 1200px;
+}
+
+.table-striped th:nth-child(2),
+.table-striped td:nth-child(2) {
+    width: 250px;
+    padding-bottom: 18px;
+}
+
+.pname {
+    display: flex;
+    gap: 13px;
+}
+
+.view-icon {
+    width: 20px;
+    margin: 0 auto;
+}

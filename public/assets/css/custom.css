@@ -1,0 +1,2274 @@
+/* =======================================================
+   Izan's BAKERY  —  Corporate Artisan Design System
+   Clean white canvas · refined neutrals · one warm accent
+   Loaded after style.css, so this layer governs the look.
+   ======================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Allura&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────── */
+:root {
+    /* Warm artisan accent — disciplined, used sparingly */
+    --bk-primary:        #BE6A36;   /* toasted terracotta */
+    --bk-primary-dark:   #97511F;
+    --bk-primary-light:  #D98B52;
+    --bk-accent:         #E8B587;
+    --bk-accent-light:   #F6EBDF;   /* faint warm tint for fills */
+    --bk-brown:          #6B4A33;
+    --bk-brown-light:    #9A7B63;
+
+    /* Clean corporate canvas */
+    --bk-bg:             #FFFFFF;
+    --bk-surface:        #FAF8F5;   /* off-white section band */
+    --bk-surface-2:      #F4F0EA;   /* slightly deeper band */
+    --bk-white:          #FFFFFF;
+
+    /* Neutral ink scale */
+    --bk-text-dark:      #1C1B19;
+    --bk-text:           #2E2C28;
+    --bk-text-medium:    #5C574F;
+    --bk-text-light:     #8A847A;
+    --bk-text-muted:     #ADA69B;
+
+    --bk-border:         #E6E1D9;
+    --bk-border-light:   #F0ECE5;
+
+    /* Deep espresso footer */
+    --bk-footer-bg:      #1A1714;
+    --bk-footer-text:    #ABA398;
+    --bk-footer-link:    #E8E2D8;
+    --bk-footer-muted:   #6E665B;
+
+    --bk-sale:           #C0492F;
+    --bk-success:        #4A7C59;
+
+    /* Soft, neutral elevation (corporate, not heavy) */
+    --bk-shadow-sm:      0 1px 2px rgba(28,27,25,0.04), 0 2px 6px rgba(28,27,25,0.04);
+    --bk-shadow-md:      0 6px 24px rgba(28,27,25,0.07);
+    --bk-shadow-lg:      0 18px 50px rgba(28,27,25,0.10);
+    --bk-shadow-amber:   0 14px 38px rgba(190,106,54,0.16);
+
+    --bk-radius:         14px;
+    --bk-radius-sm:      8px;
+    --bk-radius-lg:      22px;
+    --bk-radius-xl:      32px;
+    --bk-radius-full:    9999px;
+
+    --bk-ease:           0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    --bk-container:      1280px;
+}
+
+/* ── Base ──────────────────────────────────────────────── */
+body.gradient-bg,
+body {
+    background-color: var(--bk-bg) !important;
+    background-image: none !important;
+    color: var(--bk-text);
+    font-family: 'Jost', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4, h5, h6, .section-title { color: var(--bk-text-dark); }
+a { text-decoration: none; }
+::selection { background: var(--bk-accent-light); color: var(--bk-primary-dark); }
+
+/* Slightly wider, more spacious containers for a premium feel */
+.container { max-width: var(--bk-container); }
+.mw-1620 { max-width: var(--bk-container) !important; }
+
+/* ── Reusable type / layout helpers ───────────────────── */
+.font-playfair { font-family: 'Playfair Display', Georgia, serif; }
+.font-allura   { font-family: 'Allura', cursive; }
+.text-primary-bk { color: var(--bk-primary) !important; }
+.text-right { text-align: right; }
+.pt-90 { padding-top: 90px !important; }
+
+.bk-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bk-primary);
+    margin-bottom: 1rem;
+}
+.bk-eyebrow::before {
+    content: '';
+    width: 26px; height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+}
+.bk-eyebrow.is-centered { justify-content: center; }
+
+/* ── Header ────────────────────────────────────────────── */
+.header-mobile,
+#header.header {
+    background: rgba(255,255,255,0.92) !important;
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--bk-border-light);
+    box-shadow: none;
+    position: sticky !important;
+    top: 0;
+    z-index: 1000 !important;
+    transition: box-shadow var(--bk-ease), border-color var(--bk-ease);
+}
+#header.header.is-scrolled { box-shadow: 0 4px 24px rgba(28,27,25,0.07); }
+
+.logo__image {
+    max-width: 190px;
+    max-height: 52px;
+    width: auto;
+}
+
+.navigation__link {
+    color: var(--bk-text) !important;
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    padding-bottom: 4px !important;
+    transition: color var(--bk-ease);
+}
+.navigation__link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 2px;
+    background: var(--bk-primary);
+    transition: width var(--bk-ease);
+}
+.navigation__link:hover,
+.navigation__link.active { color: var(--bk-primary) !important; }
+.navigation__link:hover::after,
+.navigation__link.active::after { width: 100%; }
+.navigation__list.d-flex { gap: 6px; }
+.navigation__item { padding: 0 18px; }
+
+.header-tools__item,
+.header-tools__item svg { color: var(--bk-text-dark); transition: color var(--bk-ease); }
+.header-tools__item:hover,
+.header-tools__item:hover svg { color: var(--bk-primary); }
+.header-tools__item span.pr-6px { font-size: 0.82rem; font-weight: 500; }
+
+.cart-amount {
+    background: var(--bk-primary) !important;
+    color: #fff !important;
+    font-size: 0.62rem !important;
+    font-weight: 700;
+    min-width: 17px;
+    height: 17px;
+    line-height: 17px;
+    border-radius: var(--bk-radius-full) !important;
+}
+
+/* Search popup fix (theme leaves an invisible click-blocking overlay) */
+.js-hidden-content { pointer-events: none !important; visibility: hidden; }
+.hover-container:hover .hover__content,
+.hover-container.js-content_visible .js-hidden-content {
+    pointer-events: auto !important;
+    visibility: visible;
+}
+.search-popup { background: var(--bk-white) !important; border-bottom: 1px solid var(--bk-border-light); }
+.search-field__input { border-color: var(--bk-border) !important; color: var(--bk-text-dark) !important; }
+.search-field__input:focus {
+    border-color: var(--bk-primary) !important;
+    box-shadow: 0 0 0 3px rgba(190,106,54,0.12) !important;
+    outline: none;
+}
+
+/* ════════════════════════════════════════════════════════
+   BUTTONS
+   ════════════════════════════════════════════════════════ */
+.bk-btn,
+.bakery-btn-primary,
+.bakery-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 14px 30px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: var(--bk-radius-full);
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all var(--bk-ease);
+    text-decoration: none !important;
+}
+.bakery-btn-primary {
+    background: var(--bk-primary);
+    color: #fff !important;
+    border-color: var(--bk-primary);
+    box-shadow: 0 8px 22px rgba(190,106,54,0.22);
+}
+.bakery-btn-primary:hover {
+    background: var(--bk-primary-dark);
+    border-color: var(--bk-primary-dark);
+    box-shadow: 0 12px 30px rgba(190,106,54,0.30);
+    transform: translateY(-2px);
+    color: #fff !important;
+}
+.bakery-btn-outline {
+    background: transparent;
+    color: var(--bk-text-dark) !important;
+    border-color: var(--bk-border);
+}
+.bakery-btn-outline:hover {
+    border-color: var(--bk-text-dark);
+    color: var(--bk-text-dark) !important;
+    transform: translateY(-2px);
+}
+.bakery-btn-outline.on-dark { color: #fff !important; border-color: rgba(255,255,255,0.4); }
+.bakery-btn-outline.on-dark:hover { background: #fff; color: var(--bk-text-dark) !important; border-color:#fff; }
+
+/* Order-now / add-to-cart pills used across cards */
+.order-now-btn {
+    background: var(--bk-text-dark) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--bk-radius-full) !important;
+    font-weight: 600 !important;
+    font-size: 0.74rem !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 11px 18px !important;
+    transition: all var(--bk-ease) !important;
+}
+.order-now-btn:hover {
+    background: var(--bk-primary) !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+/* Bootstrap button normalisation */
+.btn-primary, .btn-info {
+    background: var(--bk-primary) !important;
+    border-color: var(--bk-primary) !important;
+    border-radius: var(--bk-radius-full) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em;
+    color: #fff !important;
+    transition: all var(--bk-ease) !important;
+}
+.btn-primary:hover, .btn-info:hover {
+    background: var(--bk-primary-dark) !important;
+    border-color: var(--bk-primary-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(190,106,54,0.26);
+}
+.btn-link { color: var(--bk-primary) !important; }
+.btn-link:hover { color: var(--bk-primary-dark) !important; }
+.btn-warning {
+    background: var(--bk-success) !important;
+    border-color: var(--bk-success) !important;
+    color: #fff !important;
+    border-radius: var(--bk-radius-full) !important;
+}
+.btn-outline-secondary {
+    border-color: var(--bk-border) !important;
+    color: var(--bk-text-medium) !important;
+    border-radius: var(--bk-radius-full) !important;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: all var(--bk-ease);
+}
+.btn-outline-secondary:hover {
+    border-color: var(--bk-text-dark) !important;
+    color: var(--bk-text-dark) !important;
+    background: transparent !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   SECTION HEADERS
+   ════════════════════════════════════════════════════════ */
+.bakery-section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 2.5rem;
+}
+.bakery-section-title,
+.section-title {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: var(--bk-text-dark);
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+}
+.bakery-section-title em { font-style: italic; color: var(--bk-primary); }
+.bakery-section-subtitle {
+    color: var(--bk-text-light);
+    font-size: 1rem;
+    margin: 0.6rem 0 0;
+    max-width: 540px;
+}
+.bk-section-head-center { text-align: center; margin: 0 auto 3rem; max-width: 640px; }
+.bk-section-head-center .bakery-section-subtitle { margin-left: auto; margin-right: auto; }
+
+.bakery-category-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 600;
+    color: var(--bk-text-dark);
+    font-size: 1.5rem;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+/* ════════════════════════════════════════════════════════
+   HERO  (photography-forward, corporate split)
+   ════════════════════════════════════════════════════════ */
+.bakery-hero {
+    background: var(--bk-white);
+    padding: clamp(48px, 7vw, 96px) 0 clamp(40px, 6vw, 80px);
+    position: relative;
+    overflow: hidden;
+}
+.bakery-hero::before {
+    content: '';
+    position: absolute;
+    top: -160px; right: -120px;
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(190,106,54,0.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+.bakery-hero__content { position: relative; z-index: 2; }
+.bakery-hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bk-primary);
+    margin-bottom: 1.5rem;
+}
+.bakery-hero__eyebrow-line { display: block; width: 30px; height: 1px; background: currentColor; opacity: 0.55; }
+
+.bakery-hero__heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--bk-text-dark);
+    margin-bottom: 1.4rem;
+}
+.bakery-hero__heading em {
+    font-style: italic;
+    color: var(--bk-primary);
+    font-weight: 500;
+    display: block;
+}
+.bakery-hero__tagline {
+    font-size: 1.1rem;
+    color: var(--bk-text-medium);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 2.25rem;
+}
+.bakery-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 2.75rem; }
+
+.bakery-hero__trust {
+    display: flex;
+    gap: 14px 36px;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid var(--bk-border-light);
+}
+.bakery-hero__trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--bk-text-medium);
+}
+.bakery-hero__trust-badge svg { color: var(--bk-primary); flex-shrink: 0; }
+
+/* Hero photograph stack */
+.bakery-hero__media { position: relative; }
+.bakery-hero__media-frame {
+    position: relative;
+    border-radius: var(--bk-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--bk-shadow-lg);
+    aspect-ratio: 4 / 5;
+}
+.bakery-hero__media-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bakery-hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 22px -22px -22px 22px;
+    border: 1px solid var(--bk-border);
+    border-radius: var(--bk-radius-lg);
+    z-index: -1;
+}
+.bakery-hero__badge {
+    position: absolute;
+    background: var(--bk-white);
+    border-radius: var(--bk-radius);
+    padding: 14px 18px;
+    box-shadow: var(--bk-shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--bk-text-dark);
+    border: 1px solid var(--bk-border-light);
+    white-space: nowrap;
+    z-index: 3;
+}
+.bakery-hero__badge-1 { bottom: 28px; left: -26px; }
+.bakery-hero__badge-2 { top: 30px; right: -26px; }
+.bakery-hero__badge-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--bk-accent-light);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bk-primary);
+    flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   FEATURE STRIP  (trust row beneath hero)
+   ════════════════════════════════════════════════════════ */
+.bk-feature-strip {
+    border-top: 1px solid var(--bk-border-light);
+    border-bottom: 1px solid var(--bk-border-light);
+    background: var(--bk-surface);
+}
+.bk-feature-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+.bk-feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 28px 26px;
+    border-right: 1px solid var(--bk-border-light);
+}
+.bk-feature:last-child { border-right: none; }
+.bk-feature__icon { color: var(--bk-primary); flex-shrink: 0; }
+.bk-feature__title { font-weight: 600; font-size: 0.92rem; color: var(--bk-text-dark); margin: 0; }
+.bk-feature__text { font-size: 0.78rem; color: var(--bk-text-light); margin: 2px 0 0; }
+@media (max-width: 991px) { .bk-feature-strip__grid { grid-template-columns: repeat(2,1fr); } .bk-feature:nth-child(2){border-right:none;} }
+@media (max-width: 575px) { .bk-feature-strip__grid { grid-template-columns: 1fr; } .bk-feature{border-right:none;border-bottom:1px solid var(--bk-border-light);} }
+
+/* ════════════════════════════════════════════════════════
+   CATEGORY TILES  (homepage)
+   ════════════════════════════════════════════════════════ */
+.bk-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+@media (max-width: 991px){ .bk-cat-grid{ grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 479px){ .bk-cat-grid{ grid-template-columns: 1fr;} }
+.bk-cat-tile {
+    position: relative;
+    display: block;
+    border-radius: var(--bk-radius);
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    box-shadow: var(--bk-shadow-sm);
+}
+.bk-cat-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--bk-ease); }
+.bk-cat-tile::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(20,15,10,0.72) 0%, rgba(20,15,10,0.15) 45%, transparent 70%);
+}
+.bk-cat-tile:hover img { transform: scale(1.07); }
+.bk-cat-tile__body { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px; z-index: 2; }
+.bk-cat-tile__name {
+    font-family: 'Playfair Display', serif;
+    color: #fff; font-size: 1.25rem; font-weight: 600; margin: 0;
+}
+.bk-cat-tile__link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.85); font-size: 0.74rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px;
+    transition: gap var(--bk-ease), color var(--bk-ease);
+}
+.bk-cat-tile:hover .bk-cat-tile__link { gap: 12px; color: #fff; }
+
+/* ════════════════════════════════════════════════════════
+   PRODUCT CARDS
+   ════════════════════════════════════════════════════════ */
+.product-card,
+.products-carousel .product-card,
+.products-by-category .product-card,
+.category-product-card {
+    background: var(--bk-white) !important;
+    border-radius: var(--bk-radius) !important;
+    overflow: hidden;
+    border: 1px solid var(--bk-border-light);
+    box-shadow: var(--bk-shadow-sm);
+    transition: transform var(--bk-ease), box-shadow var(--bk-ease), border-color var(--bk-ease);
+}
+.product-card:hover,
+.products-carousel .product-card:hover,
+.category-product-card:hover {
+    box-shadow: var(--bk-shadow-md) !important;
+    transform: translateY(-6px);
+    border-color: var(--bk-border);
+}
+.pc__img-wrapper { background: var(--bk-surface); overflow: hidden; }
+.pc__img { transition: transform 0.7s var(--bk-ease) !important; }
+.product-card:hover .pc__img { transform: scale(1.06) !important; }
+
+/* Fallback shown wherever a product has no uploaded image */
+.bkr-img-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--bk-surface, #fdf6ee);
+    color: var(--bk-primary, #C17B2F);
+}
+.bkr-img-placeholder i { line-height: 1; }
+.bkr-img-placeholder--lg i { font-size: 4rem; }
+.bkr-img-placeholder--md i { font-size: 2.75rem; }
+.bkr-img-placeholder--sm i { font-size: 1.5rem; }
+
+.pc__category {
+    font-size: 0.66rem !important;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bk-text-light) !important;
+}
+.pc__title a, .pc__title {
+    color: var(--bk-text-dark) !important;
+    font-weight: 600;
+    font-family: 'Jost', sans-serif;
+    transition: color var(--bk-ease);
+}
+.pc__title a:hover { color: var(--bk-primary) !important; }
+
+.price, .money.price, .product-card__price .money {
+    color: var(--bk-text-dark) !important;
+    font-weight: 700;
+    font-family: 'Jost', sans-serif;
+}
+.product-card__price s, .product-card__price del { color: var(--bk-text-muted) !important; font-weight: 400; }
+.review-star { fill: var(--bk-primary-light) !important; color: var(--bk-primary-light); }
+
+.pc__atc.btn {
+    background: var(--bk-text-dark) !important;
+    color: #fff !important;
+    font-size: 0.74rem !important;
+    letter-spacing: 0.06em;
+    border-radius: var(--bk-radius-full) !important;
+    border: none !important;
+    font-weight: 600 !important;
+    transition: all var(--bk-ease) !important;
+}
+.pc__atc.btn:hover { background: var(--bk-primary) !important; transform: translateY(-1px); }
+.pc__atc.btn-warning { background: var(--bk-success) !important; color: #fff !important; }
+.pc__atc.btn-warning:hover { background: #3a6348 !important; }
+.pc__btn-wl svg { transition: color var(--bk-ease); }
+.pc__btn-wl:hover svg { color: var(--bk-sale) !important; }
+
+/* Sale badge */
+.badge-sale, .badge[style*="e74c3c"] {
+    background: var(--bk-sale) !important;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+/* ════════════════════════════════════════════════════════
+   STORY / SPLIT BAND  (homepage)
+   ════════════════════════════════════════════════════════ */
+.bk-story { background: var(--bk-surface); }
+.bk-story__img {
+    border-radius: var(--bk-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--bk-shadow-md);
+    aspect-ratio: 5 / 4;
+}
+.bk-story__img img { width: 100%; height: 100%; object-fit: cover; }
+.bk-story__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+}
+.bk-story__text { color: var(--bk-text-medium); font-size: 1.02rem; line-height: 1.8; margin-bottom: 1.5rem; }
+.bk-stats { display: flex; gap: 40px; flex-wrap: wrap; margin: 1.75rem 0 2rem; }
+.bk-stat__num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 600; color: var(--bk-primary); line-height: 1; }
+.bk-stat__label { font-size: 0.8rem; color: var(--bk-text-light); letter-spacing: 0.04em; margin-top: 4px; }
+
+/* ════════════════════════════════════════════════════════
+   CTA BAND  (homepage)
+   ════════════════════════════════════════════════════════ */
+.bk-cta {
+    position: relative;
+    border-radius: var(--bk-radius-lg);
+    overflow: hidden;
+    padding: clamp(48px, 7vw, 90px) clamp(24px, 6vw, 80px);
+    color: #fff;
+    isolation: isolate;
+}
+.bk-cta__bg { position: absolute; inset: 0; z-index: -2; }
+.bk-cta__bg img { width: 100%; height: 100%; object-fit: cover; }
+.bk-cta::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(110deg, rgba(20,15,10,0.86) 0%, rgba(20,15,10,0.55) 55%, rgba(20,15,10,0.25) 100%);
+}
+.bk-cta__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600; line-height: 1.12; letter-spacing: -0.01em;
+    margin-bottom: 1rem; max-width: 16ch;
+}
+.bk-cta__text { color: rgba(255,255,255,0.8); font-size: 1.05rem; max-width: 46ch; margin-bottom: 2rem; }
+
+/* Welcome bar for signed-in users */
+.bakery-welcome-bar {
+    background: var(--bk-surface);
+    border: 1px solid var(--bk-border-light);
+    border-radius: var(--bk-radius);
+    padding: 16px 22px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.bakery-welcome-bar .user-greeting { font-size: 0.95rem; color: var(--bk-text); }
+.bakery-welcome-bar .user-name { color: var(--bk-primary); font-weight: 700; }
+
+/* ════════════════════════════════════════════════════════
+   SHOP PAGE
+   ════════════════════════════════════════════════════════ */
+.bakery-shop-banner {
+    background: var(--bk-surface);
+    border: 1px solid var(--bk-border-light);
+    border-radius: var(--bk-radius-lg);
+    padding: 40px 48px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+}
+.bakery-shop-banner::after {
+    content: '';
+    position: absolute; right: -60px; top: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(190,106,54,0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+.bakery-shop-banner__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    font-weight: 600;
+    color: var(--bk-text-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+.bakery-shop-banner__desc { color: var(--bk-text-medium); font-size: 0.95rem; line-height: 1.6; max-width: 420px; margin: 0; }
+.bakery-shop-banner__icon { font-size: 4rem; line-height: 1; flex-shrink: 0; opacity: 0.9; }
+@media (max-width: 767px) {
+    .bakery-shop-banner { padding: 26px; flex-direction: column; text-align: center; }
+    .bakery-shop-banner__icon { display: none; }
+}
+
+.shop-sidebar { background: var(--bk-white); }
+.shop-sidebar .accordion-button,
+.shop-sidebar .aside-header {
+    font-family: 'Playfair Display', serif;
+    color: var(--bk-text-dark) !important;
+    font-size: 1.02rem !important;
+    font-weight: 600;
+}
+.shop-sidebar .accordion-button:not(.collapsed) { color: var(--bk-primary) !important; }
+.shop-sidebar .accordion-button:focus { box-shadow: none !important; }
+.shop-sidebar .menu-link { color: var(--bk-text-medium) !important; font-size: 0.9rem; transition: color var(--bk-ease); }
+.shop-sidebar .menu-link:hover { color: var(--bk-primary) !important; }
+.swatch-size {
+    background: var(--bk-surface) !important;
+    border-color: var(--bk-border) !important;
+    color: var(--bk-text-medium) !important;
+    border-radius: var(--bk-radius-sm) !important;
+    font-size: 0.8rem; font-weight: 600;
+}
+.swatch-size:hover, .swatch-size.active {
+    background: var(--bk-text-dark) !important;
+    border-color: var(--bk-text-dark) !important;
+    color: #fff !important;
+}
+.shop-acs__select { color: var(--bk-text-medium) !important; font-size: 0.88rem; }
+.product-card-wrapper .product-card { border-radius: var(--bk-radius) !important; border: 1px solid var(--bk-border-light); }
+
+/* ════════════════════════════════════════════════════════
+   PRODUCT DETAIL
+   ════════════════════════════════════════════════════════ */
+.product-single__name {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem) !important;
+    font-weight: 600 !important;
+    color: var(--bk-text-dark) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.01em;
+}
+.product-single__price .current-price {
+    color: var(--bk-text-dark) !important;
+    font-size: 1.7rem !important;
+    font-weight: 700 !important;
+}
+.product-single__price .current-price s { color: var(--bk-text-muted) !important; font-weight: 400; font-size: 0.82em; }
+.btn-addtocart {
+    background: var(--bk-primary) !important;
+    border-color: var(--bk-primary) !important;
+    border-radius: var(--bk-radius-full) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 15px 38px !important;
+    font-size: 0.85rem !important;
+    transition: all var(--bk-ease) !important;
+}
+.btn-addtocart:hover {
+    background: var(--bk-primary-dark) !important;
+    border-color: var(--bk-primary-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(190,106,54,0.26);
+}
+.product-single__addtocart { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.nav-tabs .nav-link { color: var(--bk-text-medium) !important; font-weight: 500; }
+.nav-tabs .nav-link.active,
+.nav-link_underscore.active { color: var(--bk-primary) !important; border-color: var(--bk-primary) !important; }
+.meta-item label { color: var(--bk-text-medium) !important; font-weight: 600; }
+.product-single__addtolinks .menu-link { color: var(--bk-text-medium) !important; }
+.product-single__addtolinks .menu-link:hover { color: var(--bk-primary) !important; }
+
+/* ════════════════════════════════════════════════════════
+   CART & CHECKOUT
+   ════════════════════════════════════════════════════════ */
+.page-title {
+    font-family: 'Playfair Display', serif !important;
+    color: var(--bk-text-dark) !important;
+    font-size: clamp(1.8rem, 3vw, 2.4rem) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em;
+}
+.checkout-steps__item-number { transition: all var(--bk-ease); }
+.checkout-steps__item.active .checkout-steps__item-number {
+    background: var(--bk-primary) !important;
+    color: #fff !important;
+    border-color: var(--bk-primary) !important;
+}
+.cart-table th {
+    color: var(--bk-text-medium) !important;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.shopping-cart__totals h3 { font-family: 'Playfair Display', serif !important; color: var(--bk-text-dark) !important; }
+.btn-checkout {
+    background: var(--bk-primary) !important;
+    border-color: var(--bk-primary) !important;
+    border-radius: var(--bk-radius-full) !important;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    transition: all var(--bk-ease) !important;
+}
+.btn-checkout:hover {
+    background: var(--bk-primary-dark) !important;
+    border-color: var(--bk-primary-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(190,106,54,0.26);
+}
+.qty-control__reduce, .qty-control__increase { color: var(--bk-primary) !important; border-color: var(--bk-border) !important; }
+.qty-control__number { border-color: var(--bk-border) !important; color: var(--bk-text-dark) !important; }
+
+/* ════════════════════════════════════════════════════════
+   BREADCRUMB / PAGINATION / FORM
+   ════════════════════════════════════════════════════════ */
+.breadcrumb .menu-link { color: var(--bk-text-light) !important; font-size: 0.8rem; transition: color var(--bk-ease); }
+.breadcrumb .menu-link:hover { color: var(--bk-primary) !important; }
+.breadcrumb-separator { color: var(--bk-text-muted) !important; }
+
+.page-link { color: var(--bk-text-dark) !important; border-color: var(--bk-border) !important; transition: all var(--bk-ease); }
+.page-link:hover { background: var(--bk-surface) !important; border-color: var(--bk-text-dark) !important; }
+.page-item.active .page-link { background: var(--bk-text-dark) !important; border-color: var(--bk-text-dark) !important; color: #fff !important; }
+
+.accordion-button:not(.collapsed) { color: var(--bk-primary) !important; background: transparent !important; box-shadow: none !important; }
+.accordion-button:focus { box-shadow: none !important; }
+
+.form-control, .form-select {
+    border-color: var(--bk-border) !important;
+    border-radius: var(--bk-radius-sm) !important;
+    color: var(--bk-text-dark);
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--bk-primary) !important;
+    box-shadow: 0 0 0 3px rgba(190,106,54,0.12) !important;
+}
+
+/* Swiper bullets */
+.products-pagination .swiper-pagination-bullet { background: var(--bk-text-medium); }
+.swiper-pagination-bullet-active { background: var(--bk-primary) !important; opacity: 1 !important; }
+
+/* ════════════════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════════════════ */
+hr.mt-5 { display: none; }
+footer.footer { background: var(--bk-footer-bg) !important; color: var(--bk-footer-text); }
+footer.footer .footer-middle { border-bottom: 1px solid rgba(255,255,255,0.07); padding-top: 4rem; padding-bottom: 3rem; }
+footer.footer .footer-address, footer.footer p:not(.m-0) { color: var(--bk-footer-text); font-size: 0.88rem; }
+footer.footer strong, footer.footer .fw-medium { color: var(--bk-footer-link) !important; }
+footer.footer .logo .logo__image { opacity: 0.96; }
+footer.footer .sub-menu__title {
+    color: var(--bk-footer-link) !important;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 1.3rem;
+}
+footer.footer .menu-link { color: var(--bk-footer-text) !important; font-size: 0.88rem; transition: color var(--bk-ease); }
+footer.footer .menu-link:hover { color: var(--bk-primary-light) !important; padding-left: 3px; }
+footer.footer .footer__social-link { color: var(--bk-footer-muted) !important; transition: color var(--bk-ease); padding: 6px; }
+footer.footer .footer__social-link:hover { color: var(--bk-primary-light) !important; }
+footer.footer .footer-bottom { background: rgba(0,0,0,0.28); padding: 18px 0; }
+footer.footer .footer-copyright, footer.footer .footer-settings a { color: var(--bk-footer-muted) !important; font-size: 0.82rem; }
+footer.footer .footer-settings a:hover { color: var(--bk-primary-light) !important; }
+footer.footer p.m-0, footer.footer p { color: var(--bk-footer-text); }
+
+.footer-mobile {
+    background: var(--bk-white) !important;
+    border-top: 1px solid var(--bk-border-light) !important;
+    box-shadow: 0 -2px 10px rgba(28,27,25,0.05);
+}
+.footer-mobile__link { color: var(--bk-text-medium) !important; font-size: 0.72rem; }
+.mobile-menu-opened .footer-mobile { display: none !important; }
+.footer-mobile__link:hover { color: var(--bk-primary) !important; }
+
+.page-overlay { background: rgba(20,15,10,0.55) !important; }
+#scrollTop { background: var(--bk-text-dark) !important; color: #fff !important; border-radius: var(--bk-radius-sm) !important; }
+
+/* Auth */
+.login-register .page-title { font-family: 'Playfair Display', serif !important; }
+.bk-auth {
+    background:
+        linear-gradient(180deg, rgba(20,15,10,0.28) 0%, rgba(20,15,10,0.5) 100%),
+        url('../images/bakery/cta.webp') center/cover no-repeat fixed;
+    padding: clamp(48px, 8vw, 110px) 0;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+}
+.bk-auth .login-register { display: flex; justify-content: center; }
+.bk-auth__card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: var(--bk-radius-lg);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+    padding: clamp(32px, 4vw, 48px);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+.bk-auth__head { text-align: center; margin-bottom: 2rem; }
+.bk-auth__head .page-title { margin: 0 0 1rem; line-height: 1.3; color: #fff !important; }
+.bk-auth__head .bk-eyebrow { color: var(--bk-primary-light) !important; }
+.bk-auth__head .bk-eyebrow::before { background: var(--bk-primary-light) !important; }
+.bk-auth__sub { color: rgba(255,255,255,0.82) !important; font-size: 0.92rem; margin: 0; }
+
+.bk-auth-field { margin-bottom: 1.6rem; }
+.bk-auth-field__label {
+    display: block;
+    color: rgba(255,255,255,0.78);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.bk-auth-field__control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    padding-bottom: 9px;
+    transition: border-color 0.2s ease;
+}
+.bk-auth-field__control:focus-within { border-bottom-color: var(--bk-primary-light); }
+.bk-auth-field__control:has(.is-invalid) { border-bottom-color: #ff8b7a; }
+.bk-auth-field__icon { color: rgba(255,255,255,0.7); font-size: 1rem; flex-shrink: 0; }
+.bk-auth-field__control:focus-within .bk-auth-field__icon { color: var(--bk-primary-light); }
+.bk-auth-field__input {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #fff;
+    width: 100%;
+    font-size: 0.95rem;
+}
+.bk-auth-field__input::placeholder { color: rgba(255,255,255,0.5); }
+.bk-auth-field__input:-webkit-autofill { -webkit-text-fill-color: #fff; transition: background-color 9999s ease-in-out 0s; }
+.bk-auth-field__error { display: block; color: #ffb4a8; font-size: 0.78rem; margin-top: 6px; }
+.bk-auth-field__toggle {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: rgba(255,255,255,0.7);
+    font-size: 1rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    line-height: 1;
+}
+.bk-auth-field__toggle:hover, .bk-auth-field__toggle:focus { color: var(--bk-primary-light); }
+
+.bk-auth .btn-primary { border-radius: var(--bk-radius-full) !important; padding-top: 0.75rem; padding-bottom: 0.75rem; letter-spacing: 0.04em; }
+.bk-auth .btn-outline-secondary {
+    background: rgba(255,255,255,0.92) !important;
+    border-color: rgba(255,255,255,0.6) !important;
+    color: var(--bk-text-dark) !important;
+    border-radius: var(--bk-radius-full) !important;
+}
+.bk-auth .btn-outline-secondary:hover {
+    background: #fff !important;
+    border-color: #fff !important;
+    color: var(--bk-text-dark) !important;
+}
+.bk-auth hr { border-top: 1px solid rgba(255,255,255,0.25) !important; }
+.bk-auth .text-secondary { color: rgba(255,255,255,0.7) !important; }
+.bk-auth .btn-text { text-decoration: none; }
+.bk-auth .btn-text.is-muted { color: rgba(255,255,255,0.75) !important; }
+.bk-auth .customer-option .btn-text { color: var(--bk-primary-light) !important; }
+.bk-auth-privacy { font-size: 0.8rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0; }
+
+/* ════════════════════════════════════════════════════════
+   ENTRANCE ANIMATIONS  (subtle, respects reduced-motion)
+   ════════════════════════════════════════════════════════ */
+@keyframes bk-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+/* Gated on .bk-js so the content stays readable when scripting is unavailable —
+   nothing else ever removes the opacity:0, and the observer lives in JS.
+   :where() keeps the gate at zero specificity; a plain `html.bk-js` prefix
+   would outrank `.bkr-reveal.is-visible` and pin the content hidden forever. */
+:where(html.bk-js) .bk-reveal { opacity: 0; }
+.bk-reveal.is-visible { animation: bk-fade-up 0.8s var(--bk-ease) forwards; }
+.bk-reveal[data-delay="1"].is-visible { animation-delay: 0.08s; }
+.bk-reveal[data-delay="2"].is-visible { animation-delay: 0.16s; }
+.bk-reveal[data-delay="3"].is-visible { animation-delay: 0.24s; }
+@media (prefers-reduced-motion: reduce) {
+    .bk-reveal, .bk-reveal.is-visible { opacity: 1 !important; animation: none !important; }
+    * { scroll-behavior: auto !important; }
+}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════ */
+@media (max-width: 991px) {
+    .bakery-hero { padding: 56px 0 40px; }
+    .bakery-hero__badge { display: none; }
+    .bakery-hero__media::after { display: none; }
+}
+@media (max-width: 767px) {
+    .bakery-hero { text-align: center; }
+    .bakery-hero__eyebrow, .bakery-hero__actions, .bakery-hero__trust { justify-content: center; }
+    .bakery-hero__tagline { margin-left: auto; margin-right: auto; }
+    .bakery-section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .bk-stats { justify-content: center; }
+}
+
+.products-carousel .swiper-wrapper { align-items: stretch; }
+.products-carousel .swiper-slide { height: auto; }
+.products-carousel__prev:hover, .products-carousel__next:hover {
+    background: var(--bk-text-dark) !important;
+    color: #fff !important;
+    border-color: var(--bk-text-dark) !important;
+}
+
+/* My account / feedback */
+.my-account__address-list { display: flex; gap: 1.625rem; }
+.form-floating>.form-control, .form-floating>.form-select { height: 48px; }
+
+
+/* =======================================================
+   EDITORIAL LAYER  —  "Bon Appétit" reference design
+   Dark, gold-accented, sharp-edged. Scoped to the homepage
+   and the shared header/footer via .bkr-* class names, so
+   the corporate layer above still governs every other page.
+   ======================================================= */
+
+:root {
+    --bkr-gold:        #A08A3C;
+    --bkr-gold-light:  #C4AC5E;
+    --bkr-ink:         #14110E;   /* near-black canvas */
+    --bkr-ink-soft:    #2A2520;
+    --bkr-paper:       #FFFFFF;
+    --bkr-body:        #4A443C;   /* body copy on white */
+    --bkr-rule:        #DED8CB;
+
+    --bkr-serif:       'Playfair Display', Georgia, serif;
+    --bkr-sans:        'Jost', system-ui, sans-serif;
+    --bkr-body-font:   'Montserrat', system-ui, sans-serif;  /* descriptive body copy */
+
+    --bkr-gap:         clamp(64px, 9vw, 140px);  /* vertical section rhythm */
+    --bkr-ease:        0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Shared primitives ─────────────────────────────────── */
+
+/* Letterspaced uppercase label — the reference uses this everywhere */
+.bkr-eyebrow {
+    display: block;
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--bkr-gold);
+}
+.bkr-eyebrow.on-dark { color: rgba(255,255,255,0.86); }
+
+/* Serif display heading */
+.bkr-display {
+    font-family: var(--bkr-serif);
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--bkr-ink);
+    margin: 0;
+}
+.bkr-display.on-dark { color: #fff; }
+
+/* Ghost outline button — the only button style in the reference */
+.bkr-btn {
+    position: relative;
+    isolation: isolate;   /* keeps the ::before fill behind the label */
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.05em 3.2em;
+    border: 1px solid var(--bkr-gold);
+    background: transparent;
+    color: var(--bkr-gold);
+    font-family: var(--bkr-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color var(--bkr-ease), border-color var(--bkr-ease), transform 0.18s ease;
+}
+/* The gold ground rises from the base rather than snapping in — the fill is a
+   pseudo-element so only `transform` animates, never a paint-heavy background. */
+.bkr-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bkr-gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bkr-btn:hover, .bkr-btn:focus-visible { color: #fff; }
+.bkr-btn:hover::before, .bkr-btn:focus-visible::before { transform: scaleY(1); }
+.bkr-btn:active { transform: translateY(1px) scale(0.985); }
+
+.bkr-btn.on-dark {
+    border-color: rgba(255,255,255,0.75);
+    color: #fff;
+}
+.bkr-btn.on-dark::before { background: #fff; }
+.bkr-btn.on-dark:hover, .bkr-btn.on-dark:focus-visible {
+    color: var(--bkr-ink);
+    border-color: #fff;
+}
+
+/* Wheat mark + rosette inherit currentColor so they work on any ground */
+.bkr-mark { display: block; }
+
+/* ── Header: transparent overlay nav ───────────────────── */
+
+.bkr-header {
+    position: absolute;
+    inset: 0 0 auto 0;
+    /* Above .bkr-panel (2000) so the burger stays visible and clickable while
+       the menu is open — it is the panel's only close control. The panel is
+       display:none when closed, so nothing else competes at this level. */
+    z-index: 2100;
+    padding: clamp(20px, 3vw, 38px) clamp(20px, 4vw, 60px);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background: transparent;
+    transition: background var(--bkr-ease), padding var(--bkr-ease);
+}
+/* Overlay headers gain a solid ground once scrolled off the hero.
+   .is-scrolled is toggled by the existing header script in layouts/app.blade.php. */
+.bkr-header.is-overlay.is-scrolled {
+    position: fixed;
+    background: var(--bkr-ink);
+    padding-top: clamp(12px, 1.6vw, 18px);
+    padding-bottom: clamp(12px, 1.6vw, 18px);
+}
+
+.bkr-header__menu-btn {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+/* Two independent rules rather than the borders of one box, so each can rotate
+   into half of the X. A two-line burger is the tidy case here — there is no
+   middle bar needing to be faded out of the way. */
+.bkr-header__burger {
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 9px;
+}
+.bkr-header__burger::before,
+.bkr-header__burger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bkr-header__burger::before { top: 0; }
+.bkr-header__burger::after  { bottom: 0; }
+
+/* Open: both rules converge on the centre line (4px each way across the 9px
+   box) and cross. Driven by aria-expanded so the visual state cannot drift
+   from the accessible one. */
+[aria-expanded="true"] .bkr-header__burger::before { transform: translateY(4px) rotate(45deg); }
+[aria-expanded="true"] .bkr-header__burger::after  { transform: translateY(-4px) rotate(-45deg); }
+
+/* Hover nudges the rules apart — a small tactile cue that it is a control. */
+.bkr-header__menu-btn:hover .bkr-header__burger::before { transform: translateY(-1px); }
+.bkr-header__menu-btn:hover .bkr-header__burger::after  { transform: translateY(1px); }
+.bkr-header__menu-btn:hover[aria-expanded="true"] .bkr-header__burger::before { transform: translateY(4px) rotate(45deg); }
+.bkr-header__menu-btn:hover[aria-expanded="true"] .bkr-header__burger::after  { transform: translateY(-4px) rotate(-45deg); }
+
+/* MENU / CLOSE stacked in one grid cell: the wider of the two sets the width,
+   so the crossfade cannot shift the header layout. Matters here because the
+   Malay label ("Tutup") is wider than the English one. */
+.bkr-header__menu-label {
+    display: grid;
+    text-align: left;
+}
+.bkr-header__menu-label > span {
+    grid-area: 1 / 1;
+    transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bkr-header__menu-label-close { opacity: 0; transform: translateY(6px); }
+[aria-expanded="true"] .bkr-header__menu-label-open  { opacity: 0; transform: translateY(-6px); }
+[aria-expanded="true"] .bkr-header__menu-label-close { opacity: 1; transform: none; }
+
+.bkr-header__logo { justify-self: center; color: #fff; display: inline-flex; }
+.bkr-header__logo svg { width: 34px; height: auto; }
+.bkr-header__logo img {
+    height: clamp(42px, 5vw, 64px);
+    width: auto;
+    display: block;
+}
+
+.bkr-header__tools {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2vw, 28px);
+    color: #fff;
+}
+.bkr-header__cart { position: relative; color: inherit; display: inline-flex; }
+.bkr-header__cart-count {
+    position: absolute;
+    top: -6px;
+    right: -9px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 9999px;
+    background: var(--bkr-gold);
+    color: #fff;
+    font-family: var(--bkr-sans);
+    font-size: 0.6rem;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+}
+
+/* EN | MS locale switcher */
+.bkr-locale {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.4);
+}
+.bkr-locale a {
+    padding: 0.42em 0.85em;
+    color: rgba(255,255,255,0.72);
+    font-family: var(--bkr-sans);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color var(--bkr-ease), background var(--bkr-ease);
+}
+.bkr-locale a + a { border-left: 1px solid rgba(255,255,255,0.4); }
+.bkr-locale a.is-active { background: rgba(255,255,255,0.14); color: #fff; }
+.bkr-locale a:hover { color: #fff; }
+
+/* ── Hero ──────────────────────────────────────────────── */
+
+.bkr-hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    overflow: visible;   /* lets the cutout loaf break the bottom edge */
+    isolation: isolate;
+}
+.bkr-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+.bkr-hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.bkr-hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20,17,14,0.62) 0%, rgba(20,17,14,0.44) 45%, rgba(20,17,14,0.72) 100%);
+}
+.bkr-hero__inner {
+    padding: clamp(120px, 16vh, 200px) 20px clamp(90px, 12vh, 150px);
+    max-width: 1120px;
+}
+.bkr-hero__eyebrow { color: rgba(255,255,255,0.9); margin-bottom: clamp(14px, 2vw, 22px); }
+.bkr-hero__title {
+    font-size: clamp(2.4rem, 6.4vw, 5.2rem);
+    margin-bottom: clamp(28px, 4vw, 46px);
+}
+.bkr-hero__title em { font-style: italic; }
+
+/* The cutout loaf straddling the hero → white seam.
+   Hidden until the PNG exists; see .bkr-hero__cutout img[src$=".png"] below. */
+.bkr-hero__cutout {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 3;
+    width: clamp(170px, 23vw, 340px);
+    transform: translate(-50%, 42%);
+    pointer-events: none;
+}
+.bkr-hero__cutout img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 50px rgba(0,0,0,0.42));
+}
+
+/* ── Split rows: image ↔ copy, alternating ─────────────── */
+
+.bkr-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(30px, 6vw, 90px);
+    margin-bottom: var(--bkr-gap);
+}
+.bkr-split:last-child { margin-bottom: 0; }
+
+/* Reversed rows put the image on the right */
+.bkr-split.is-reversed .bkr-split__media { order: 2; }
+.bkr-split.is-reversed .bkr-split__body { order: 1; text-align: right; }
+.bkr-split.is-reversed .bkr-split__body .bkr-split__cta { justify-content: flex-end; flex-direction: row-reverse; }
+
+.bkr-split__media img {
+    width: 100%;
+    /* Tokenised because the sticky pin below sizes the row against it */
+    height: var(--bkr-split-media-h);
+    object-fit: cover;
+    display: block;
+}
+.bkr-split__body { max-width: 460px; }
+.bkr-split.is-reversed .bkr-split__body { margin-left: auto; }
+
+.bkr-split__title {
+    font-size: clamp(2.1rem, 4vw, 3.4rem);
+    margin: 0.35em 0 0.55em;
+}
+.bkr-split__text {
+    font-family: var(--bkr-body-font);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--bkr-body);
+    margin-bottom: clamp(26px, 3.5vw, 42px);
+}
+.bkr-split__price {
+    font-family: var(--bkr-serif);
+    font-size: 1.35rem;
+    color: var(--bkr-gold);
+    margin-bottom: 1.1em;
+    display: block;
+}
+.bkr-split__price del {
+    font-size: 0.85em;
+    color: var(--bkr-body);
+    opacity: 0.6;
+    margin-right: 0.45em;
+}
+
+/* The BUY button with a hairline rule running out toward the image */
+.bkr-split__cta { display: flex; align-items: center; }
+.bkr-split__cta .bkr-btn { padding-inline: 2.4em; flex-shrink: 0; }
+.bkr-split__rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--bkr-gold);
+    opacity: 0.55;
+}
+
+/* ── "A word from the baker" ───────────────────────────── */
+
+.bkr-baker {
+    position: relative;
+    text-align: center;
+    padding: var(--bkr-gap) 20px;
+}
+.bkr-baker__watermark {
+    position: absolute;
+    top: clamp(10px, 4vw, 48px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(180px, 24vw, 300px);
+    color: var(--bkr-rule);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+.bkr-baker > *:not(.bkr-baker__watermark) { position: relative; z-index: 1; }
+.bkr-baker__title {
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+    font-style: italic;
+    margin-bottom: 0.7em;
+}
+.bkr-baker__lead {
+    font-family: var(--bkr-body-font);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--bkr-ink);
+    margin-bottom: 1.4em;
+}
+.bkr-baker__text {
+    max-width: 620px;
+    margin: 0 auto clamp(40px, 6vw, 72px);
+    font-family: var(--bkr-body-font);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--bkr-body);
+}
+/* Portrait on a thin gold stem, with the name beneath */
+.bkr-baker__portrait {
+    width: clamp(96px, 11vw, 132px);
+    height: clamp(96px, 11vw, 132px);
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+.bkr-baker__stem {
+    width: 1px;
+    height: 34px;
+    background: var(--bkr-gold);
+    margin: 0 auto;
+}
+.bkr-baker__name {
+    font-family: var(--bkr-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--bkr-ink);
+    margin: 0;
+}
+
+/* ── Menu: white panel floating over a dark photo ──────── */
+
+.bkr-menu {
+    position: relative;
+    padding: var(--bkr-gap) 0;
+    isolation: isolate;
+}
+.bkr-menu__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+.bkr-menu__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bkr-menu__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(20,17,14,0.35);
+}
+.bkr-menu__panel {
+    width: min(1180px, calc(100% - clamp(24px, 8vw, 160px)));
+    margin: 0 auto;
+    background: var(--bkr-paper);
+    padding: clamp(48px, 7vw, 100px) clamp(28px, 6vw, 96px);
+    text-align: center;
+}
+
+/* Rosette "Menu / 2026" badge */
+.bkr-rosette {
+    width: clamp(120px, 15vw, 170px);
+    margin: 0 auto clamp(40px, 6vw, 72px);
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: var(--bkr-rule);
+}
+.bkr-rosette__label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 2px;
+    text-align: center;
+}
+.bkr-rosette__word {
+    font-family: var(--bkr-serif);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    color: var(--bkr-ink);
+    line-height: 1;
+}
+.bkr-rosette__year {
+    font-family: var(--bkr-sans);
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    color: var(--bkr-ink);
+}
+
+/* Two-column price list */
+.bkr-menu__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 54px) clamp(40px, 7vw, 110px);
+    text-align: left;
+    margin-bottom: clamp(44px, 6vw, 76px);
+}
+.bkr-menu__item { break-inside: avoid; }
+.bkr-menu__head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 0.7em;
+}
+.bkr-menu__name {
+    font-family: var(--bkr-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--bkr-gold);
+    margin: 0;
+    white-space: nowrap;
+}
+.bkr-menu__dots { flex: 1 1 auto; height: 1px; background: var(--bkr-gold); opacity: 0.5; }
+.bkr-menu__price {
+    font-family: var(--bkr-serif);
+    font-size: 1.25rem;
+    color: var(--bkr-gold);
+    white-space: nowrap;
+}
+.bkr-menu__desc {
+    font-family: var(--bkr-body-font);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--bkr-body);
+    margin: 0;
+}
+
+/* ── Footer: dark photo band ───────────────────────────── */
+
+.bkr-footer {
+    position: relative;
+    padding: clamp(70px, 10vw, 130px) 20px;
+    text-align: center;
+    isolation: isolate;
+    overflow: hidden;
+}
+.bkr-footer__bg { position: absolute; inset: 0; z-index: -2; }
+.bkr-footer__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bkr-footer__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(20,17,14,0.66);
+}
+.bkr-footer__social {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 34px);
+    margin-bottom: clamp(40px, 6vw, 70px);
+}
+.bkr-footer__social a {
+    color: #fff;
+    opacity: 0.9;
+    transition: opacity var(--bkr-ease), transform var(--bkr-ease);
+    display: inline-flex;
+}
+.bkr-footer__social a:hover { opacity: 1; transform: translateY(-2px); }
+.bkr-footer__logo {
+    color: #fff;
+    margin: 0 auto clamp(40px, 6vw, 70px);
+    width: max-content;
+}
+.bkr-footer__logo svg { width: 40px; height: auto; }
+.bkr-footer__logo img {
+    height: clamp(64px, 8vw, 104px);
+    width: auto;
+    display: block;
+}
+.bkr-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(6px, 1.2vw, 14px);
+    margin-bottom: clamp(28px, 4vw, 44px);
+}
+.bkr-footer__nav a {
+    padding: 0.85em 1.6em;
+    color: #fff;
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background var(--bkr-ease), color var(--bkr-ease);
+}
+.bkr-footer__nav a:hover { color: var(--bkr-gold-light); }
+.bkr-footer__nav a.is-active {
+    background: var(--bkr-gold);
+    color: #fff;
+}
+.bkr-footer__nav a.is-active:hover { color: #fff; }
+.bkr-footer__legal {
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.55);
+    margin: 0;
+}
+
+/* ── Scroll reveal (reuses the existing .bk-reveal hook) ─ */
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(html.bk-js) .bkr-reveal {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .bkr-reveal.is-visible { opacity: 1; transform: none; }
+    .bkr-reveal[data-delay="1"] { transition-delay: 0.12s; }
+    .bkr-reveal[data-delay="2"] { transition-delay: 0.24s; }
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    .bkr-split,
+    .bkr-menu__grid { grid-template-columns: 1fr; }
+
+    /* Stack every split row image-first, regardless of direction */
+    .bkr-split.is-reversed .bkr-split__media { order: 1; }
+    .bkr-split.is-reversed .bkr-split__body { order: 2; text-align: left; margin-left: 0; }
+    .bkr-split.is-reversed .bkr-split__body .bkr-split__cta { justify-content: flex-start; flex-direction: row; }
+    .bkr-split__body { max-width: none; }
+}
+
+@media (max-width: 620px) {
+    .bkr-header { padding-inline: 18px; }
+    .bkr-header__menu-label { display: none; }  /* burger only */
+    .bkr-hero__cutout { width: 42vw; transform: translate(-50%, 38%); }
+    .bkr-menu__panel { width: calc(100% - 24px); }
+    .bkr-split__cta .bkr-btn { padding-inline: 1.8em; }
+}
+
+/* ── Header: solid variant for light pages ─────────────── */
+
+.bkr-header.is-solid {
+    position: sticky;
+    top: 0;
+    background: var(--bkr-ink);
+    padding-top: clamp(14px, 1.8vw, 22px);
+    padding-bottom: clamp(14px, 1.8vw, 22px);
+}
+/* Overlay pages get the absolute/transparent treatment from .bkr-header itself */
+.bkr-header.is-overlay { position: absolute; }
+
+/* ── Slide-in menu panel ───────────────────────────────── */
+
+.bkr-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(24px, 4vw, 42px);
+    padding: clamp(60px, 10vh, 110px) 24px clamp(40px, 6vh, 70px);
+    /* Ground lives on ::before so it can wipe without scaling the content */
+    background: transparent;
+    overflow-y: auto;
+    /* Panel still covers the screen through the closing animation, so stop it
+       swallowing clicks until it is actually open */
+    pointer-events: none;
+}
+.bkr-panel[hidden] { display: none; }
+.bkr-panel.is-open { pointer-events: auto; }
+
+/* The curtain. position:fixed rather than absolute so it keeps covering the
+   viewport if the panel itself scrolls on a short screen. */
+.bkr-panel::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--bkr-ink);
+    transform: scaleY(0);
+    transform-origin: top;
+    /* Closing: brief pause while the links clear, then retract upward */
+    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+.bkr-panel.is-open::before {
+    transform: scaleY(1);
+    /* Opening: no delay — the ground leads, content follows */
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0s;
+}
+
+/* Content enters behind the curtain, one element at a time. Delay is carried by
+   a per-child index so the timing lives in one calc rather than eight rules,
+   and is applied only to opacity/transform — folding it into the shorthand
+   would otherwise delay the hover colour change by up to two-thirds of a
+   second once the panel is open. */
+.bkr-panel__nav a,
+.bkr-panel__search,
+.bkr-panel__account {
+    opacity: 0;
+    transform: translateY(18px);
+    /* Closing: quick and unstaggered, so the panel does not linger */
+    transition: opacity 0.2s ease, transform 0.2s ease, color var(--bkr-ease);
+}
+.bkr-panel.is-open .bkr-panel__nav a,
+.bkr-panel.is-open .bkr-panel__search,
+.bkr-panel.is-open .bkr-panel__account {
+    opacity: 1;
+    transform: none;
+    transition:
+        opacity 0.5s ease calc(0.24s + var(--bkr-panel-i, 0) * 0.06s),
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) calc(0.24s + var(--bkr-panel-i, 0) * 0.06s),
+        color var(--bkr-ease) 0s;
+}
+.bkr-panel__nav a:nth-child(1) { --bkr-panel-i: 0; }
+.bkr-panel__nav a:nth-child(2) { --bkr-panel-i: 1; }
+.bkr-panel__nav a:nth-child(3) { --bkr-panel-i: 2; }
+.bkr-panel__nav a:nth-child(4) { --bkr-panel-i: 3; }
+.bkr-panel__nav a:nth-child(5) { --bkr-panel-i: 4; }
+.bkr-panel__nav a:nth-child(6) { --bkr-panel-i: 5; }
+/* Nav is a fixed six links, so search and account continue straight on from
+   five. If a seventh link is ever added it shares a step with the search field
+   rather than opening a gap — two elements arriving together is unnoticeable,
+   a pause in the cascade is not. */
+.bkr-panel__search  { --bkr-panel-i: 6; }
+.bkr-panel__account { --bkr-panel-i: 7; }
+
+.bkr-panel__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px, 1.6vw, 18px);
+    text-align: center;
+}
+.bkr-panel__nav a {
+    font-family: var(--bkr-serif);
+    font-size: clamp(1.7rem, 4.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: #fff;
+    text-decoration: none;
+    transition: color var(--bkr-ease);
+}
+.bkr-panel__nav a:hover,
+.bkr-panel__nav a.is-active { color: var(--bkr-gold-light); }
+
+/* Hairline drawing out from the centre — the same motif as the rule beside the
+   BUY buttons on the homepage, so the menu borrows an existing gesture rather
+   than introducing a new one. Doubles as the current-page marker. */
+.bkr-panel__nav a { position: relative; }
+.bkr-panel__nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.06em;
+    height: 1px;
+    background: var(--bkr-gold-light);
+    transform: scaleX(0);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bkr-panel__nav a:hover::after,
+.bkr-panel__nav a:focus-visible::after,
+.bkr-panel__nav a.is-active::after { transform: scaleX(1); }
+
+.bkr-panel__search {
+    display: flex;
+    align-items: center;
+    width: min(420px, 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.34);
+}
+.bkr-panel__search input {
+    flex: 1 1 auto;
+    padding: 0.8em 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    font-family: var(--bkr-sans);
+    font-size: 0.86rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+}
+.bkr-panel__search input::placeholder { color: rgba(255,255,255,0.45); }
+.bkr-panel__search input:focus { outline: none; }
+.bkr-panel__search button {
+    border: 0;
+    background: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 0 0 0 10px;
+    display: inline-flex;
+    transition: color var(--bkr-ease);
+}
+.bkr-panel__search button:hover { color: #fff; }
+
+.bkr-panel__account {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(14px, 2.4vw, 28px);
+    text-align: center;
+}
+.bkr-panel__account a {
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    transition: color var(--bkr-ease);
+}
+.bkr-panel__account a:hover { color: var(--bkr-gold-light); }
+.bkr-panel__greeting {
+    font-family: var(--bkr-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--bkr-gold);
+}
+.bkr-panel__account .bkr-locale { flex-basis: 100%; justify-content: center; }
+
+/* Lock background scroll while the panel is open */
+html.bkr-panel-open, html.bkr-panel-open body { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+    /* Curtain, cascade, burger morph and underline all resolve instantly —
+       the panel simply is open or closed, with no travel. */
+    .bkr-panel { transition: none; }
+    .bkr-panel::before,
+    .bkr-panel.is-open::before { transform: scaleY(1); transition: none; }
+    .bkr-panel__nav a,
+    .bkr-panel__search,
+    .bkr-panel__account { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .bkr-panel__nav a::after,
+    .bkr-header__burger::before,
+    .bkr-header__burger::after,
+    .bkr-header__menu-label > span { transition: none !important; }
+}
+
+/* Footer contact block — kept from the previous footer, restyled centered */
+.bkr-footer__contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px clamp(16px, 2.6vw, 32px);
+    margin: 0 0 clamp(20px, 3vw, 30px);
+    font-family: var(--bkr-sans);
+    font-size: 0.72rem;
+    font-weight: 300;
+    font-style: normal;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.72);
+}
+.bkr-footer__contact a {
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    transition: color var(--bkr-ease);
+}
+.bkr-footer__contact a:hover { color: var(--bkr-gold-light); }
+
+/* =======================================================
+   MOTION LAYER  —  warm, handcrafted, restrained
+   Every rule here animates only `transform`, `opacity` or
+   `filter`, so nothing triggers layout. Ambient loops are
+   gated behind `prefers-reduced-motion: no-preference`;
+   interaction states (hover/press) stay on, since they are
+   direct responses to input rather than idle movement.
+   ======================================================= */
+
+:root {
+    /* One organic curve shared by the whole layer: a quick start that
+       settles slowly, the way dough relaxes rather than snapping. */
+    --bk-ease-organic: cubic-bezier(0.22, 1, 0.36, 1);
+    --bk-stagger-step: 70ms;
+}
+
+/* ── Reveal: directional + staggered variants ───────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Grid children opt in via [data-reveal-stagger] on the parent; the
+       observer assigns --bk-stagger per intersection batch, so each row
+       counts from zero instead of inheriting the whole grid's index. */
+    :where(html.bk-js) .bkr-reveal { transition-delay: calc(var(--bk-stagger, 0) * var(--bk-stagger-step)); }
+    :where(html.bk-js) .bkr-reveal[data-delay="1"] { transition-delay: calc(0.12s + var(--bk-stagger, 0) * var(--bk-stagger-step)); }
+    :where(html.bk-js) .bkr-reveal[data-delay="2"] { transition-delay: calc(0.24s + var(--bk-stagger, 0) * var(--bk-stagger-step)); }
+    :where(html.bk-js) .bkr-reveal[data-delay="3"] { transition-delay: calc(0.36s + var(--bk-stagger, 0) * var(--bk-stagger-step)); }
+
+    /* A shorter, gentler rise than the default 26px — for cards and list rows,
+       where the full travel would read as heavy.
+       Translate only, deliberately. A horizontal offset pushes past the
+       container edge and can hand the page a transient horizontal scrollbar,
+       and a scale changes measured width: several reveal targets wrap Swiper
+       containers that size their slides at init, so a scaled ancestor risks
+       baking in slightly-too-narrow slides. Translation moves an element
+       without altering its width, which keeps those measurements honest. */
+    :where(html.bk-js) .bkr-reveal--soft { transform: translate3d(0, 14px, 0); }
+    .bkr-reveal--soft.is-visible { transform: none; }
+}
+
+/* ── Hero: a slow settle, not a zoom ───────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Starts marginally overscaled and eases back to its natural size over
+       18s. `forwards` keeps it a one-shot settle — an infinite loop at this
+       scale would read as drift and burn GPU for the life of the page. */
+    .bkr-hero__bg img { animation: bkr-hero-settle 18s var(--bk-ease-organic) forwards; }
+    @keyframes bkr-hero-settle {
+        from { transform: scale(1.08); }
+        to   { transform: scale(1); }
+    }
+}
+
+/* ── Floating flour ────────────────────────────────────── */
+/* Motes of flour catching the light in front of the dark hero. Nine spans,
+   each drifting up and sideways on its own clock so no pattern is legible. */
+
+.bkr-motes {
+    position: absolute;
+    inset: 0;
+    /* Above the hero photograph (-2) but behind the headline, so the flour
+       drifts inside the scene rather than washing over the type. The hero's
+       `isolation: isolate` keeps the negative index scoped to the section. */
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+.bkr-motes span {
+    position: absolute;
+    bottom: -8%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,252,244,0.95) 0%, rgba(255,248,235,0.35) 55%, transparent 72%);
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Duration/delay/size/left arrive as inline styles from the partial;
+       the shorthand keeps a working default if the layer is used bare. */
+    .bkr-motes span { animation: bkr-mote-rise 20s linear infinite; }
+
+    /* Two axes on one element would need two keyframe sets, so the sway
+       rides a rotation of the drift instead: cheap, and irregular enough. */
+    @keyframes bkr-mote-rise {
+        0%   { opacity: 0; transform: translate3d(0, 0, 0) scale(0.7); }
+        12%  { opacity: var(--bk-mote-peak, 0.5); }
+        50%  { transform: translate3d(var(--bk-mote-sway, 18px), -46vh, 0) scale(1); }
+        88%  { opacity: var(--bk-mote-peak, 0.5); }
+        100% { opacity: 0; transform: translate3d(0, -92vh, 0) scale(0.8); }
+    }
+
+}
+
+/* Fewer motes on phones. Thinning every other one rather than cutting the tail
+   of the list: the lefts are not in left-to-right order, so hiding the last N
+   stripped one whole side of the hero instead of reducing density evenly. */
+@media (max-width: 767px) {
+    .bkr-motes span:nth-child(even) { display: none; }
+}
+
+/* ── Steam off the loaf ────────────────────────────────── */
+/* Three wisps lifting off the cutout where it still overlaps the dark hero,
+   so they read against the photograph and vanish before the white seam. */
+
+.bkr-steam {
+    position: absolute;
+    left: 50%;
+    bottom: 72%;
+    width: 60%;
+    height: 46%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+.bkr-steam span {
+    position: absolute;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.12) 60%, transparent 75%);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .bkr-steam span { animation: bkr-steam-rise 7s var(--bk-ease-organic) infinite; }
+    @keyframes bkr-steam-rise {
+        0%   { opacity: 0; transform: translate3d(0, 10%, 0) scale(0.6); }
+        25%  { opacity: 0.55; }
+        60%  { opacity: 0.32; transform: translate3d(-8px, -120%, 0) scale(1.5); }
+        100% { opacity: 0; transform: translate3d(6px, -230%, 0) scale(2.2); }
+    }
+    .bkr-steam span:nth-child(1) { left: 28%; animation-delay: 0s; }
+    .bkr-steam span:nth-child(2) { left: 50%; animation-delay: -2.4s; }
+    .bkr-steam span:nth-child(3) { left: 70%; animation-delay: -4.6s; }
+}
+
+/* ── Section rules that draw themselves ────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* The hairline running out of each BUY button toward the product photo */
+    :where(html.bk-js) .bkr-split__rule {
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 1.1s var(--bk-ease-organic) 0.25s;
+    }
+    :where(html.bk-js) .bkr-split.is-reversed .bkr-split__rule { transform-origin: right; }
+    :where(html.bk-js) .bkr-split.is-visible .bkr-split__rule { transform: scaleX(1); }
+
+    /* The baker's rosette breathes — 24s, ±1.5%, below conscious notice */
+    .bkr-baker__watermark { animation: bkr-breathe 24s ease-in-out infinite; }
+    @keyframes bkr-breathe {
+        0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
+        50%      { transform: translateX(-50%) scale(1.015); opacity: 0.62; }
+    }
+}
+
+/* ── Product cards: a warmer lift ──────────────────────── */
+
+.product-card,
+.products-carousel .product-card,
+.products-by-category .product-card,
+.category-product-card {
+    /* Longer than the shared --bk-ease so the lift settles instead of snapping */
+    transition: transform 0.42s var(--bk-ease-organic),
+                box-shadow 0.42s var(--bk-ease-organic),
+                border-color 0.42s var(--bk-ease-organic);
+}
+.product-card:hover,
+.products-carousel .product-card:hover,
+.category-product-card:hover {
+    /* Amber-tinted rather than neutral grey — the shadow carries the brand */
+    box-shadow: var(--bk-shadow-amber) !important;
+}
+/* The image eases out of its zoom more slowly than it eases in */
+.pc__img { transition: transform 0.85s var(--bk-ease-organic) !important; }
+.product-card:hover .pc__img { transform: scale(1.055) !important; }
+
+.pc__title a { transition: color 0.28s var(--bk-ease-organic); }
+
+/* ── Tactile press ─────────────────────────────────────── */
+/* Buttons already lift on hover; these give the click somewhere to land. */
+
+.bakery-btn-primary:active,
+.bakery-btn-outline:active,
+.order-now-btn:active,
+.btn-primary:active,
+.btn-info:active,
+.pc__atc.btn:active {
+    transform: translateY(0) scale(0.97) !important;
+    transition-duration: 0.09s !important;
+}
+
+/* Hover state was `all`, which sweeps layout properties too */
+.pc__atc.btn {
+    transition: background 0.3s var(--bk-ease-organic),
+                color 0.3s var(--bk-ease-organic),
+                transform 0.3s var(--bk-ease-organic),
+                box-shadow 0.3s var(--bk-ease-organic) !important;
+}
+
+/* Keyboard users get the same affordance the mouse gets */
+.bkr-btn:focus-visible,
+.bakery-btn-primary:focus-visible,
+.order-now-btn:focus-visible,
+.pc__atc.btn:focus-visible {
+    outline: 2px solid var(--bkr-gold);
+    outline-offset: 3px;
+}
+
+/* ── Header settle ─────────────────────────────────────── */
+
+.bkr-header__cart svg { transition: transform 0.3s var(--bk-ease-organic); }
+.bkr-header__cart:hover svg { transform: translateY(-2px); }
+
+/* The count badge pops when the cart changes (class added on add-to-cart) */
+@media (prefers-reduced-motion: no-preference) {
+    .bkr-header__cart-count.is-bumped { animation: bkr-bump 0.5s var(--bk-ease-organic); }
+    @keyframes bkr-bump {
+        0%   { transform: scale(1); }
+        40%  { transform: scale(1.28); }
+        100% { transform: scale(1); }
+    }
+}
+
+/* ── Reduced motion: hard stop ─────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .bkr-motes,
+    .bkr-steam { display: none; }
+
+    .bkr-hero__bg img { animation: none !important; transform: none !important; }
+    /* Stops the breathing loop but keeps the centering transform — clearing it
+       outright would shunt the watermark half its width off-centre. */
+    .bkr-baker__watermark { animation: none !important; transform: translateX(-50%) !important; }
+
+    .bkr-reveal,
+    .bkr-reveal.is-visible { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .bkr-split__rule { transform: none !important; transition: none !important; }
+
+    .bkr-btn::before { transition: none; }
+    .product-card:hover { transform: none !important; }
+    .product-card:hover .pc__img { transform: none !important; }
+}
+
+/* ── Homepage: split-row product images ────────────────── */
+/* These three are the largest clickable things on the page and had no hover
+   state at all. Matching the shop card's zoom + amber shadow so the homepage
+   and the shop read as one system. */
+
+.bkr-split__media a {
+    display: block;
+    overflow: hidden;              /* clips the zoom */
+    transition: box-shadow 0.5s var(--bk-ease-organic);
+}
+.bkr-split__media img { transition: transform 0.85s var(--bk-ease-organic); }
+.bkr-split__media a:hover,
+.bkr-split__media a:focus-visible { box-shadow: var(--bk-shadow-amber); }
+.bkr-split__media a:hover img,
+.bkr-split__media a:focus-visible img { transform: scale(1.045); }
+
+/* ── Parallax on the full-bleed photographs ────────────── */
+/* Oversized so there is room to travel without exposing an edge: the extra
+   height is split evenly above and below via the negative margin. JS writes the
+   `translate` property (not `transform`) so it composes with the hero's own
+   scale animation instead of fighting it for the same property. */
+
+.bkr-hero__bg img,
+.bkr-menu__bg img,
+.bkr-footer__bg img {
+    height: calc(100% + var(--bk-parallax-overshoot, 120px));
+    margin-top: calc(var(--bk-parallax-overshoot, 120px) / -2);
+}
+
+/* ── Hero headline: line-by-line mask reveal ───────────── */
+
+/* The title's own reveal is cancelled — it exists only so the observer tags it.
+   Higher specificity than the base .bkr-reveal rule, so this wins. */
+:where(html.bk-js) .bkr-hero__title.bkr-reveal { opacity: 1; transform: none; }
+
+.bkr-hero__line {
+    display: block;
+    overflow: hidden;
+    /* Room for descenders and the italic's overhang, cancelled again by the
+       negative margin so the mask does not alter the heading's spacing. */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+}
+.bkr-hero__line-in { display: block; }
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(html.bk-js) .bkr-hero__line-in {
+        transform: translateY(105%);
+        transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: calc(var(--bkr-line-i, 0) * 0.12s);
+    }
+    .bkr-hero__title.is-visible .bkr-hero__line-in { transform: none; }
+
+    /* On the preloader path the observer fires while the overlay still covers
+       the page, which would spend the reveal unseen. Pin the lines down until
+       the preloader lifts, then let the transition play.
+       :not(.bk-loaded) so they release when the curtains START parting — the
+       headline then rises into the widening gap instead of waiting for the
+       preloader element to be removed a second later. */
+    html.bk-preloading:not(.bk-loaded) .bkr-hero__line-in { transform: translateY(105%) !important; transition: none !important; }
+}
+
+/* ── Baker: stem draws down, portrait settles in ───────── */
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(html.bk-js) .bkr-baker__portrait {
+        opacity: 0;
+        transform: scale(0.88);
+        transition: opacity 0.7s ease 0.15s, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+    }
+    :where(html.bk-js) .bkr-baker.is-visible .bkr-baker__portrait { opacity: 1; transform: none; }
+
+    /* Same gesture as the hairline beside the BUY buttons, turned vertical */
+    :where(html.bk-js) .bkr-baker__stem {
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+    }
+    :where(html.bk-js) .bkr-baker.is-visible .bkr-baker__stem { transform: scaleY(1); }
+
+    /* Lands once the stem has finished drawing, so the line leads the eye to it */
+    :where(html.bk-js) .bkr-baker__name {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.6s ease 1.1s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1.1s;
+    }
+    :where(html.bk-js) .bkr-baker.is-visible .bkr-baker__name { opacity: 1; transform: none; }
+}
+
+/* ── Menu: leader rules draw across ────────────────────── */
+/* Delay tracks the row's own stagger so the lines ripple down the list in step
+   with it rather than running on their own clock. */
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(html.bk-js) .bkr-menu__dots {
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: calc(0.18s + var(--bk-stagger, 0) * var(--bk-stagger-step));
+    }
+    :where(html.bk-js) .bkr-menu__item.is-visible .bkr-menu__dots { transform: scaleX(1); }
+}
+
+/* ── Reduced motion ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .bkr-hero__line-in,
+    .bkr-baker__portrait,
+    .bkr-baker__stem,
+    .bkr-baker__name,
+    .bkr-menu__dots {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    /* No parallax travel, so the images need no overshoot to hide */
+    .bkr-hero__bg img,
+    .bkr-menu__bg img,
+    .bkr-footer__bg img { height: 100%; margin-top: 0; translate: none !important; }
+    .bkr-split__media a:hover img { transform: none !important; }
+}
+
+/* ── Featured rows: the photo holds while the copy passes ─ */
+/* Sticky rather than a JS scroll handler: the browser owns the pin, so it stays
+   locked under fast or momentum scrolling and costs nothing per frame.
+   A sticky element can only hold for as long as its container outlasts it, and
+   these two columns are otherwise the same height — hence the added row height,
+   which IS the hold distance (row height minus photo height). */
+
+:root {
+    --bkr-split-media-h:    clamp(340px, 44vw, 560px);
+    /* How far the photo stays put. Raise for a longer hold — but it is added to
+       the row, so every 10vh here adds ~10vh of page per product. */
+    --bkr-split-pin:        40vh;
+    /* Clears the fixed header so the photo does not pin underneath it */
+    --bkr-split-sticky-top: clamp(84px, 11vh, 120px);
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+    .bkr-split {
+        /* Photo aligns to the row top so it starts level with the copy and has
+           the full row to travel through */
+        align-items: start;
+        min-height: calc(var(--bkr-split-media-h) + var(--bkr-split-pin));
+    }
+    .bkr-split__media {
+        position: sticky;
+        top: var(--bkr-split-sticky-top);
+    }
+    /* Copy rides the middle of the taller row, so the extra height reads as
+       breathing room either side rather than a hole beneath the text */
+    .bkr-split__body { align-self: center; }
+}
