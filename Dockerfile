@@ -74,4 +74,6 @@ COPY --from=assets /app/public/build ./public/build
 # Laravel writes logs/cache/sessions here; php-fpm's workers run as www-data.
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+USER www-data
+
 # php-fpm listens on port 9000 (CMD inherited from the base image).
