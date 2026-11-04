@@ -1,8 +1,6 @@
 # Multi-stage build: compile and install in throwaway stages, ship only PHP-FPM + the app.
 # ---- Stage 1: base = PHP-FPM + compiled extensions. Shared by the vendor and final stages. ----
 FROM php:8.5-fpm-alpine AS base
-
-
 # ONE RUN = ONE layer: whatever is installed AND deleted inside it never reaches the image.
 # set -eux: -e stop at the first error, -u error on unset variables, -x print each command in the build log.
 RUN set -eux \
@@ -26,11 +24,10 @@ RUN set -eux \
 
  # ---- Stage 2: vendor = Composer deps, installed against the SAME PHP + extensions as production. ----
 FROM base AS vendor
-
 # App build tools: Composer needs git + unzip, the asset build needs Node + npm (Step 3c removes these).
 RUN apk add --no-cache git unzip 
 
-# Copy the Composer binary from the official Composer image
+# Composer needs git and unzip to fetch packages.
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # All following commands run inside this folder
@@ -53,8 +50,6 @@ COPY . .
 
 # npm ci = install the exact versions from package-lock.json; npm run build = Vite writes public/build/.
 RUN npm ci && npm run build
-
-
 # ---- Stage 4: final = what ships. Starts from base (PHP-FPM + extensions), with no build tools. ----
 FROM base AS final
 
