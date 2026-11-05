@@ -58,6 +58,22 @@ services:
       timeout: 3s
       retries: 5
 
+  worker:
+    image: labapp:local                     # reuse the image app builds (no build: key, so no second build)
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]  # replaces the default php-fpm with the queue worker
+    restart: unless-stopped                 # brings the worker back after --max-time exits it every hour
+    env_file:
+      - .env                                # same settings as app
+    depends_on:
+      db:
+        condition: service_healthy          # jobs need the database
+      redis:
+        condition: service_healthy          # jobs are pulled from the Redis queue
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@fsockopen('redis', 6379) ? 0 : 1);"]  # the worker has no port, so test it can reach Redis
+      interval: 5s                          # check every 5 seconds
+      timeout: 3s                           # each check fails if it takes longer than 3s
+      retries: 5                            # unhealthy after 5 failed checks in a row
 volumes:
   redis-data:
   db-data: # named volume for postgres data
