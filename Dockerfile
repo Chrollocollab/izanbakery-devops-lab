@@ -22,7 +22,7 @@ RUN set -eux \
  && rm -rf /tmp/pear \
 # Remove the whole build group (compilers, headers, LLVM). The runtime libs above stay.
  && apk del .build-deps
- # ---- Stage 2: vendor = Composer deps, installed against the SAME PHP + extensions as production. ----
+# ---- Stage 2: vendor = Composer deps, installed against the SAME PHP + extensions as production. ----
 FROM base AS vendor
 
 # Composer needs git and unzip to fetch packages.
@@ -51,8 +51,25 @@ COPY . .
 
 # npm ci = install the exact versions from package-lock.json; npm run build = Vite writes public/build/.
 RUN npm ci && npm run build
-# ---- Stage 4: final = what ships. Starts from base (PHP-FPM + extensions), with no build tools. ----
-      
+
+# ---- Stage 4: web = Nginx + static files only. No PHP, and no app code outside public/. ----
+FROM nginx:1.30-alpine AS web
+
+# Your server block replaces the image's default site.
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# The static files from your source. Same path as the app container,
+# so the SCRIPT_FILENAME that Nginx sends also exists on app's disk.
+COPY public /var/www/html/public
+
+# Vite's compiled CSS/JS. They aren't in the source because .dockerignore excludes public/build.
+COPY --from=assets /app/public/build /var/www/html/public/build
+
+# Laravel's upload URLs start with /storage/, and this link points them at the uploads volume.
+# It stays broken until Compose mounts that volume.
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
+
+# ---- Stage 5: final = the PHP image. Starts from base (PHP-FPM + extensions), with no build tools. ----
 FROM base AS final
 
 # Same path as the vendor stage, so Composer's autoloader paths match.
@@ -74,3 +91,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 USER www-data
 
 # php-fpm listens on port 9000 (CMD inherited from the base image).
+
+
