@@ -39,3 +39,4 @@ Thumbs.db
 bootstrap/cache/*.php
 Dockerfile
 .dockerignore
+compose.yaml
