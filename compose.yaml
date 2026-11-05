@@ -14,21 +14,50 @@ services:
 
   db:
     image: postgres:18-alpine
-    restart: unless-stopped                 # restart on crash/reboot unless you stop it manually
+    restart: unless-stopped # restart on crash/reboot unless you stop it manually
     environment:
-      POSTGRES_USER: ${DB_USERNAME}           # superuser name, read from DB_USERNAME in .env
-      POSTGRES_PASSWORD: ${DB_PASSWORD}       # password for that user, from DB_PASSWORD
-      POSTGRES_DB: ${DB_DATABASE}             # database name, from DB_DATABASE
+      POSTGRES_USER: ${DB_USERNAME} # superuser name, read from DB_USERNAME in .env
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # password for that user, from DB_PASSWORD
+      POSTGRES_DB: ${DB_DATABASE} # database name, from DB_DATABASE
     volumes:
-      - db-data:/var/lib/postgresql           # persist data so it survives container removal
+      - db-data:/var/lib/postgresql # persist data so it survives container removal
     healthcheck:
       # -h 127.0.0.1 checks over TCP, so it only passes once the real server is up.
-      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "${DB_USERNAME}", "-d", "${DB_DATABASE}"]
-      interval: 5s                          # check every 5 seconds
-      timeout: 3s                           # each check fails if it takes longer than 3s
-      retries: 10                           # postgres takes longer to boot than Redis, so allow more retries
-      start_period: 20s                     # failures during the first 20s don't count against retries
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-h",
+          "127.0.0.1",
+          "-U",
+          "${DB_USERNAME}",
+          "-d",
+          "${DB_DATABASE}",
+        ]
+      interval: 5s # check every 5 seconds
+      timeout: 3s # each check fails if it takes longer than 3s
+      retries: 10 # postgres takes longer to boot than Redis, so allow more retries
+      start_period: 20s # failures during the first 20s don't count against retries
+
+  app:
+    build:
+      context: .
+      target: final
+    image: labapp:local
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 9000) ? 0 : 1);"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
 volumes:
   redis-data:
-  db-data:                                  # named volume for postgres data
+  db-data: # named volume for postgres data
