@@ -39,6 +39,23 @@ services:
       retries: 10 # postgres takes longer to boot than Redis, so allow more retries
       start_period: 20s # failures during the first 20s don't count against retries
 
+  migrate:
+    # Same image app builds. No build: key, so it doesn't build a second time (like worker).
+    image: labapp:local
+    # Runs every pending migration once, then the container exits.
+    # --force = allow migrate when APP_ENV=production (otherwise it stops at a "are you sure?" prompt).
+    command: ["php", "artisan", "migrate", "--force"]
+    # Same DB credentials and APP_KEY as app.
+    env_file:
+      - .env
+    # Never restart. Exit 0 means "done", not "crashed".
+    # Quoted because a bare no in YAML becomes the boolean false.
+    restart: "no"
+    depends_on:
+      db:
+        # Don't try to migrate until Postgres accepts connections.
+        condition: service_healthy
+
   app:
     build:
       context: .
@@ -54,6 +71,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 9000) ? 0 : 1);"]
       interval: 5s
@@ -82,6 +101,8 @@ services:
         condition: service_healthy # jobs need the database
       redis:
         condition: service_healthy # jobs are pulled from the Redis queue
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
       # the worker has no port, so test it can reach Redis
       test: ["CMD", "php", "-r", "exit(@fsockopen('redis', 6379) ? 0 : 1);"]
