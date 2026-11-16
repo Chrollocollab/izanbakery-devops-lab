@@ -41,7 +41,7 @@ services:
 
   migrate:
     # Same image app builds. No build: key, so it doesn't build a second time (like worker).
-    image: labapp:local
+    image: ghcr.io/chrollocollab/labapp-app:${APP_TAG:-latest}
     # Runs every pending migration once, then the container exits.
     # --force = allow migrate when APP_ENV=production (otherwise it stops at a "are you sure?" prompt).
     command: ["php", "artisan", "migrate", "--force"]
@@ -60,7 +60,7 @@ services:
     build:
       context: .
       target: final
-    image: labapp:local
+    image: ghcr.io/chrollocollab/labapp-app:${APP_TAG:-latest}
     restart: unless-stopped
     env_file:
       - .env
@@ -80,7 +80,7 @@ services:
       retries: 5
 
   worker:
-    image: labapp:local # reuse the image app builds (no build: key, so no second build)
+    image: ghcr.io/chrollocollab/labapp-app:${APP_TAG:-latest} # reuse the image app builds (no build: key, so no second build)
     # replaces the default php-fpm with the queue worker
     command:
       [
@@ -114,7 +114,7 @@ services:
     build:
       context: . # build from the project folder
       target: web # use the "web" (Nginx) stage in the Dockerfile
-    image: labapp-web:local # name of the built image (same one you tested)
+    image: ghcr.io/chrollocollab/labapp-web:${APP_TAG:-latest} # name of the built image (same one you tested)
     restart: unless-stopped # restart on crash/reboot unless you stop it
     ports:
       - "127.0.0.1:8080:80" # Mac port 8080 -> Nginx port 80, only on this Mac (not Wi-Fi)
