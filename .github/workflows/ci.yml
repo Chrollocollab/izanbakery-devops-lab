@@ -80,7 +80,7 @@ jobs:
       # Run all tests against Postgres
       - run: php artisan test
 
-build:
+  build:
     # Wait for the test job; skip this job if tests fail
     needs: test
     # Only a push to main builds images, never a pull request
