@@ -21,8 +21,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'   => ['required', 'string', 'max:255', 'regex:/^[\pL\s\'\-\.]+$/u'],
-            'email'  => 'required|email|max:255|unique:users,email,' . $user->id,
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\'\-\.]+$/u'],
+            'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'mobile' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s()]+$/'],
         ]);
 
@@ -40,7 +40,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => 'required|current_password',
-            'password'          => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
         Auth::user()->update([

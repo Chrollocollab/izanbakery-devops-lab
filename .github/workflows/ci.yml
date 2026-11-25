@@ -1,0 +1,81 @@
+name: CI
+
+# Run on pushes to main and on every pull request
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The job's token can only read code
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    # Throwaway database, destroyed with the job
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          # TestCase.php allows only this database name
+          POSTGRES_DB: izanbakery_ecommerce_test
+          POSTGRES_USER: ci
+          # Not a real secret: exists only during this job
+          POSTGRES_PASSWORD: ci-only
+        # Map the container's port to the runner
+        ports: ['5432:5432']
+        # Wait until Postgres accepts connections
+        options: >-
+          --health-cmd "pg_isready -U ci -d izanbakery_ecommerce_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # Real env vars win over the .env file
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USERNAME: ci
+      DB_PASSWORD: ci-only
+
+    steps:
+      # Copy the pushed code
+      - uses: actions/checkout@v7
+
+      # Same PHP version and extensions as the Docker image
+      - uses: shivammathur/setup-php@2.40.0
+        with:
+          php-version: '8.5'
+          extensions: pdo_pgsql, gd, zip, intl, bcmath, exif, pcntl, redis
+          coverage: none
+          tools: composer:v2
+
+      # Find Composer's download folder
+      - id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      # Reuse downloads; the key changes when composer.lock changes
+      - uses: actions/cache@v6
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      # Git doesn't contain .env, so make one
+      - run: cp .env.example .env
+
+      # Install the exact locked versions
+      - run: composer install --no-interaction --prefer-dist
+
+      # Throwaway encryption key
+      - run: php artisan key:generate --force
+
+      # Fail on bad code style, without changing files
+      - run: vendor/bin/pint --test
+
+      # Find bugs without running the code
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
+      # Run all tests against Postgres
+      - run: php artisan test

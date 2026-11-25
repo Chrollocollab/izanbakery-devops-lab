@@ -12,13 +12,11 @@ class OrderConfirmationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Order $order)
-    {
-    }
+    public function __construct(public Order $order) {}
 
     public function build()
     {
-        return $this->subject('Your Izan\'s Bakery order ' . $this->order->order_number)
+        return $this->subject('Your Izan\'s Bakery order '.$this->order->order_number)
             ->view('mail.order-confirmation');
     }
 }

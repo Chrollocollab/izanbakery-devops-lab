@@ -14,9 +14,7 @@ class NewOrderPlaced extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected Order $order)
-    {
-    }
+    public function __construct(protected Order $order) {}
 
     /**
      * Telegram is sent once via an anonymous route (see CartController); admin
@@ -55,11 +53,11 @@ class NewOrderPlaced extends Notification implements ShouldQueue
         $orderUrl = route('admin.order.show', $this->order->id);
 
         $content = "*New order placed*\n"
-            . "Order: `{$this->order->order_number}`\n"
-            . "Customer: {$this->order->name} ({$this->order->phone})\n"
-            . "Total: RM " . number_format((float) $this->order->total, 2) . "\n"
-            . "{$itemLines}\n\n"
-            . "[View order]({$orderUrl})";
+            ."Order: `{$this->order->order_number}`\n"
+            ."Customer: {$this->order->name} ({$this->order->phone})\n"
+            .'Total: RM '.number_format((float) $this->order->total, 2)."\n"
+            ."{$itemLines}\n\n"
+            ."[View order]({$orderUrl})";
 
         return TelegramMessage::create()
             ->to(config('services.telegram-bot-api.admin_chat_id'))

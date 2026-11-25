@@ -23,10 +23,10 @@ class HomeController extends Controller
             ->sortBy(fn ($product) => array_search($product->slug, $featuredSlugs))
             ->values();
 
-        $categories = Category::with(['products' => function($query) {
+        $categories = Category::with(['products' => function ($query) {
             $query->visible()
-                  ->where('stock_status', 'instock')
-                  ->orderBy('created_at', 'DESC');
+                ->where('stock_status', 'instock')
+                ->orderBy('created_at', 'DESC');
         }])->get();
 
         return view('index', compact('products', 'categories'));
@@ -35,8 +35,8 @@ class HomeController extends Controller
     public function infaq()
     {
         $currentTurn = (int) Setting::get('infaq_current_turn', 0);
-        $collected   = (float) InfaqContribution::verified()->sum('amount');
-        $gallery     = InfaqGallery::orderBy('masjid_index')->orderBy('id')->get()->groupBy('masjid_index');
+        $collected = (float) InfaqContribution::verified()->sum('amount');
+        $gallery = InfaqGallery::orderBy('masjid_index')->orderBy('id')->get()->groupBy('masjid_index');
 
         return view('infaq', compact('currentTurn', 'collected', 'gallery'));
     }
@@ -49,21 +49,21 @@ class HomeController extends Controller
     public function infaqContribute(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name'    => 'nullable|string|max:255',
-            'email'   => 'nullable|email|max:255',
-            'phone'   => 'nullable|string|max:30',
-            'amount'  => 'required|numeric|min:1|max:100000',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:30',
+            'amount' => 'required|numeric|min:1|max:100000',
             'receipt' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
         ]);
 
         $contribution = InfaqContribution::create([
             'user_id' => $request->user()?->id,
-            'name'    => $validated['name'] ?? null,
-            'email'   => $validated['email'] ?? null,
-            'phone'   => $validated['phone'] ?? null,
-            'amount'  => $validated['amount'],
-            'status'  => InfaqContribution::STATUS_PENDING,
-            'source'  => InfaqContribution::SOURCE_ONLINE,
+            'name' => $validated['name'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'amount' => $validated['amount'],
+            'status' => InfaqContribution::STATUS_PENDING,
+            'source' => InfaqContribution::SOURCE_ONLINE,
         ]);
 
         $contribution->addMediaFromRequest('receipt')->toMediaCollection('receipt');

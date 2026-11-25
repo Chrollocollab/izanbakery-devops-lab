@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\NewOrderPlaced;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -21,6 +22,7 @@ class CartController extends Controller
     public function index()
     {
         $items = Cart::instance('cart')->content();
+
         return view('cart', compact('items'));
     }
 
@@ -35,7 +37,7 @@ class CartController extends Controller
     public function add_to_cart(Request $request)
     {
         $validated = $request->validate([
-            'id'       => 'required|integer|exists:products,id',
+            'id' => 'required|integer|exists:products,id',
             'quantity' => 'nullable|integer|min:1',
         ]);
 
@@ -121,7 +123,7 @@ class CartController extends Controller
                 ->with('error', 'Your cart is empty.');
         }
 
-        $today = \Carbon\Carbon::today();
+        $today = Carbon::today();
         $maxPickupDate = $today->copy()->addMonthNoOverflow()->endOfMonth();
 
         $timeSlots = [];
@@ -130,19 +132,19 @@ class CartController extends Controller
         }
 
         $validated = $request->validate([
-            'full_name'         => ['required', 'string', 'max:255', 'regex:/^[\pL\s\'\-\.]+$/u'],
-            'phone'             => ['required', 'digits_between:10,11'],
-            'email'             => 'required|email|max:255',
-            'fulfillment_type'  => ['required', Rule::in(['pickup', 'delivery'])],
-            'pickup_date'       => [
+            'full_name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\'\-\.]+$/u'],
+            'phone' => ['required', 'digits_between:10,11'],
+            'email' => 'required|email|max:255',
+            'fulfillment_type' => ['required', Rule::in(['pickup', 'delivery'])],
+            'pickup_date' => [
                 'required',
                 'date',
-                'after_or_equal:' . $today->toDateString(),
-                'before_or_equal:' . $maxPickupDate->toDateString(),
+                'after_or_equal:'.$today->toDateString(),
+                'before_or_equal:'.$maxPickupDate->toDateString(),
             ],
-            'pickup_time'       => ['required', Rule::in($timeSlots)],
-            'address'           => 'required_if:fulfillment_type,delivery|nullable|string|max:1000',
-            'proof_of_payment'  => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
+            'pickup_time' => ['required', Rule::in($timeSlots)],
+            'address' => 'required_if:fulfillment_type,delivery|nullable|string|max:1000',
+            'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
         ]);
 
         // Recompute totals from authoritative product prices.
@@ -159,11 +161,11 @@ class CartController extends Controller
             $subtotal += $lineSubtotal;
 
             $orderItems[] = [
-                'product_id'   => $product->id,
+                'product_id' => $product->id,
                 'product_name' => $product->name,
-                'price'        => $price,
-                'quantity'     => $row->qty,
-                'subtotal'     => $lineSubtotal,
+                'price' => $price,
+                'quantity' => $row->qty,
+                'subtotal' => $lineSubtotal,
             ];
         }
 
@@ -175,24 +177,24 @@ class CartController extends Controller
         $total = round($subtotal, 2);
 
         $fulfillmentNote = ucfirst($validated['fulfillment_type'])
-            . ' on ' . $validated['pickup_date'] . ' at ' . $validated['pickup_time'];
+            .' on '.$validated['pickup_date'].' at '.$validated['pickup_time'];
 
         $order = Order::create([
-            'user_id'      => $request->user()?->id,
+            'user_id' => $request->user()?->id,
             'order_number' => Order::generateOrderNumber(),
-            'status'       => Order::STATUS_PENDING_PAYMENT,
-            'name'         => $validated['full_name'],
-            'phone'        => $validated['phone'],
-            'email'        => $validated['email'],
-            'address'      => $validated['fulfillment_type'] === 'delivery'
+            'status' => Order::STATUS_PENDING_PAYMENT,
+            'name' => $validated['full_name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'address' => $validated['fulfillment_type'] === 'delivery'
                 ? $validated['address']
                 : 'Store pickup',
-            'notes'        => $fulfillmentNote,
-            'subtotal'     => $subtotal,
-            'discount'     => 0,
-            'tax'          => 0,
-            'shipping'     => 0,
-            'total'        => $total,
+            'notes' => $fulfillmentNote,
+            'subtotal' => $subtotal,
+            'discount' => 0,
+            'tax' => 0,
+            'shipping' => 0,
+            'total' => $total,
         ]);
 
         foreach ($orderItems as $item) {
@@ -201,9 +203,9 @@ class CartController extends Controller
 
         $payment = Payment::create([
             'order_id' => $order->id,
-            'method'   => 'qr_transfer',
-            'amount'   => $total,
-            'status'   => 'pending',
+            'method' => 'qr_transfer',
+            'amount' => $total,
+            'status' => 'pending',
         ]);
 
         $payment->addMediaFromRequest('proof_of_payment')->toMediaCollection('receipt');

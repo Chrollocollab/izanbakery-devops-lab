@@ -21,12 +21,13 @@ class OrderSeeder extends Seeder
     {
         // Create sample customers if they don't exist
         $customers = $this->createCustomers();
-        
+
         // Get all products with their categories
         $products = Product::with('category')->get();
-        
+
         if ($products->isEmpty()) {
             $this->command->warn('No products found. Please run ProductSeeder first.');
+
             return;
         }
 
@@ -35,7 +36,7 @@ class OrderSeeder extends Seeder
 
         // Payment methods
         $paymentMethods = ['cash', 'qr_transfer'];
-        
+
         // Malaysian cities and states
         $locations = [
             ['city' => 'Kuala Lumpur', 'state' => 'Wilayah Persekutuan', 'postal' => '50000'],
@@ -62,23 +63,23 @@ class OrderSeeder extends Seeder
         $this->command->info('Phase 1: Seeding guaranteed orders for each product...');
         foreach ($products as $product) {
             $numGuaranteedOrders = rand(3, 5);
-            
+
             for ($i = 0; $i < $numGuaranteedOrders; $i++) {
                 $customer = $customers->random();
                 $location = $locations[array_rand($locations)];
                 $createdAt = Carbon::now()->subDays(rand(0, $totalDays))->subHours(rand(8, 20))->subMinutes(rand(0, 59));
-                
+
                 // 80% completed for statistics, 20% other statuses
                 $status = rand(1, 100) <= 80 ? Order::STATUS_COMPLETED : $this->getRandomStatus();
-                
+
                 $quantity = rand(1, 4);
                 $price = $product->sale_price ?? $product->regular_price;
                 $subtotal = $price * $quantity;
-                
+
                 $order = $this->createOrder($customer, $location, $createdAt, $status, $subtotal);
                 $this->createOrderItem($order, $product, $quantity, $price, $createdAt);
                 $this->createPayment($order, $paymentMethods, $status, $createdAt);
-                
+
                 $orderCount++;
             }
         }
@@ -87,44 +88,46 @@ class OrderSeeder extends Seeder
         $this->command->info('Phase 2: Seeding category-diverse orders...');
         foreach ($categories as $category) {
             $categoryProducts = $products->where('category_id', $category->id);
-            
-            if ($categoryProducts->isEmpty()) continue;
-            
+
+            if ($categoryProducts->isEmpty()) {
+                continue;
+            }
+
             // Create 5-10 orders per category with mixed products from that category
             $numCategoryOrders = rand(5, 10);
-            
+
             for ($i = 0; $i < $numCategoryOrders; $i++) {
                 $customer = $customers->random();
                 $location = $locations[array_rand($locations)];
                 $createdAt = Carbon::now()->subDays(rand(0, $totalDays))->subHours(rand(8, 20))->subMinutes(rand(0, 59));
                 $status = rand(1, 100) <= 75 ? Order::STATUS_COMPLETED : $this->getRandomStatus();
-                
+
                 // Pick 1-3 products from this category
                 $numItems = min(rand(1, 3), $categoryProducts->count());
                 $selectedProducts = $categoryProducts->random($numItems);
-                
+
                 $subtotal = 0;
                 $orderItems = [];
-                
+
                 foreach ($selectedProducts as $product) {
                     $quantity = rand(1, 3);
                     $price = $product->sale_price ?? $product->regular_price;
                     $itemSubtotal = $price * $quantity;
                     $subtotal += $itemSubtotal;
-                    
+
                     $orderItems[] = [
                         'product' => $product,
                         'quantity' => $quantity,
                         'price' => $price,
                     ];
                 }
-                
+
                 $order = $this->createOrder($customer, $location, $createdAt, $status, $subtotal);
-                
+
                 foreach ($orderItems as $item) {
                     $this->createOrderItem($order, $item['product'], $item['quantity'], $item['price'], $createdAt);
                 }
-                
+
                 $this->createPayment($order, $paymentMethods, $status, $createdAt);
                 $orderCount++;
             }
@@ -139,52 +142,56 @@ class OrderSeeder extends Seeder
                 $weightedProducts[] = $product;
             }
         }
-        
+
         $numRandomOrders = 200;
         for ($i = 0; $i < $numRandomOrders; $i++) {
             $customer = $customers->random();
             $location = $locations[array_rand($locations)];
-            
+
             // Distribute orders across time with some daily variance
             $daysAgo = rand(0, $totalDays);
             $hour = rand(8, 21); // Business hours bias
             $createdAt = Carbon::now()->subDays($daysAgo)->setHour($hour)->subMinutes(rand(0, 59));
-            
+
             $status = $this->getWeightedStatus();
-            
+
             // Pick 1-5 products using weighted selection
             $numItems = rand(1, 5);
             $selectedProductIds = [];
             $orderItems = [];
             $subtotal = 0;
-            
+
             for ($j = 0; $j < $numItems; $j++) {
                 $randomProduct = $weightedProducts[array_rand($weightedProducts)];
-                
+
                 // Avoid duplicate products in same order
-                if (in_array($randomProduct->id, $selectedProductIds)) continue;
+                if (in_array($randomProduct->id, $selectedProductIds)) {
+                    continue;
+                }
                 $selectedProductIds[] = $randomProduct->id;
-                
+
                 $quantity = rand(1, 4);
                 $price = $randomProduct->sale_price ?? $randomProduct->regular_price;
                 $itemSubtotal = $price * $quantity;
                 $subtotal += $itemSubtotal;
-                
+
                 $orderItems[] = [
                     'product' => $randomProduct,
                     'quantity' => $quantity,
                     'price' => $price,
                 ];
             }
-            
-            if (empty($orderItems)) continue;
-            
+
+            if (empty($orderItems)) {
+                continue;
+            }
+
             $order = $this->createOrder($customer, $location, $createdAt, $status, $subtotal);
-            
+
             foreach ($orderItems as $item) {
                 $this->createOrderItem($order, $item['product'], $item['quantity'], $item['price'], $createdAt);
             }
-            
+
             $this->createPayment($order, $paymentMethods, $status, $createdAt);
             $orderCount++;
         }
@@ -194,39 +201,39 @@ class OrderSeeder extends Seeder
         for ($i = 0; $i < 30; $i++) {
             $customer = $customers->random();
             $location = $locations[array_rand($locations)];
-            
+
             // Last 7 days with emphasis on recent days
             $daysAgo = rand(0, 6);
             $hour = rand(9, 20);
             $createdAt = Carbon::now()->subDays($daysAgo)->setHour($hour)->subMinutes(rand(0, 59));
-            
+
             $status = rand(1, 100) <= 70 ? Order::STATUS_COMPLETED : $this->getRandomStatus();
-            
+
             $numItems = rand(1, 4);
             $selectedProducts = $products->random(min($numItems, $products->count()));
-            
+
             $subtotal = 0;
             $orderItems = [];
-            
+
             foreach ($selectedProducts as $product) {
                 $quantity = rand(1, 3);
                 $price = $product->sale_price ?? $product->regular_price;
                 $itemSubtotal = $price * $quantity;
                 $subtotal += $itemSubtotal;
-                
+
                 $orderItems[] = [
                     'product' => $product,
                     'quantity' => $quantity,
                     'price' => $price,
                 ];
             }
-            
+
             $order = $this->createOrder($customer, $location, $createdAt, $status, $subtotal);
-            
+
             foreach ($orderItems as $item) {
                 $this->createOrderItem($order, $item['product'], $item['quantity'], $item['price'], $createdAt);
             }
-            
+
             $this->createPayment($order, $paymentMethods, $status, $createdAt);
             $orderCount++;
         }
@@ -241,10 +248,19 @@ class OrderSeeder extends Seeder
     private function getWeightedStatus(): string
     {
         $rand = rand(1, 100);
-        if ($rand <= 50) return Order::STATUS_COMPLETED;
-        if ($rand <= 65) return Order::STATUS_PAID;
-        if ($rand <= 80) return Order::STATUS_READY_FOR_PICKUP;
-        if ($rand <= 94) return Order::STATUS_PENDING_PAYMENT;
+        if ($rand <= 50) {
+            return Order::STATUS_COMPLETED;
+        }
+        if ($rand <= 65) {
+            return Order::STATUS_PAID;
+        }
+        if ($rand <= 80) {
+            return Order::STATUS_READY_FOR_PICKUP;
+        }
+        if ($rand <= 94) {
+            return Order::STATUS_PENDING_PAYMENT;
+        }
+
         return Order::STATUS_CANCELLED;
     }
 
@@ -260,6 +276,7 @@ class OrderSeeder extends Seeder
             Order::STATUS_COMPLETED,
             Order::STATUS_CANCELLED,
         ];
+
         return $statuses[array_rand($statuses)];
     }
 
@@ -283,13 +300,13 @@ class OrderSeeder extends Seeder
             'shipping' => $shipping,
             'total' => $total,
             'name' => $customer->name,
-            'phone' => $customer->mobile ?? '01' . rand(10000000, 99999999),
+            'phone' => $customer->mobile ?? '01'.rand(10000000, 99999999),
             'email' => $customer->email,
-            'address' => 'No. ' . rand(1, 100) . ', Jalan ' . rand(1, 20) . '/' . rand(1, 15),
+            'address' => 'No. '.rand(1, 100).', Jalan '.rand(1, 20).'/'.rand(1, 15),
             'city' => $location['city'],
             'state' => $location['state'],
             'postal_code' => $location['postal'],
-            'notes' => rand(0, 100) > 70 ? 'Tolong hantar sebelum pukul ' . rand(10, 18) . ':00' : null,
+            'notes' => rand(0, 100) > 70 ? 'Tolong hantar sebelum pukul '.rand(10, 18).':00' : null,
             'delivered_at' => $status === Order::STATUS_COMPLETED ? $createdAt->copy()->addDays(rand(1, 3)) : null,
             'cancelled_at' => $status === Order::STATUS_CANCELLED ? $createdAt->copy()->addHours(rand(1, 24)) : null,
             'created_at' => $createdAt,
@@ -319,14 +336,14 @@ class OrderSeeder extends Seeder
      */
     private function createPayment($order, $paymentMethods, $status, $createdAt): Payment
     {
-        $paymentMethod = $paymentMethods[array_rand($paymentMethods)];        
+        $paymentMethod = $paymentMethods[array_rand($paymentMethods)];
         // Determine payment status based on order status
         $completedStatuses = [
             Order::STATUS_COMPLETED,
             Order::STATUS_PAID,
             Order::STATUS_READY_FOR_PICKUP,
         ];
-        
+
         if (in_array($status, $completedStatuses)) {
             $paymentStatus = 'completed';
         } elseif ($status === Order::STATUS_CANCELLED) {
@@ -355,44 +372,44 @@ class OrderSeeder extends Seeder
     {
         $this->command->newLine();
         $this->command->info('=== STATISTICS SUMMARY ===');
-        
+
         // Order status breakdown
         $this->command->info('Order Status Breakdown:');
         foreach (Order::getStatuses() as $statusKey => $statusName) {
             $count = Order::where('status', $statusKey)->count();
             $this->command->line("  - {$statusName}: {$count}");
         }
-        
+
         // Product sales summary (top 5)
         $this->command->newLine();
         $this->command->info('Top 5 Products by Quantity Sold:');
-        $topProducts = Product::withSum(['orderItems as total_sold' => function($query) {
-            $query->whereHas('order', fn($q) => $q->where('status', Order::STATUS_COMPLETED));
+        $topProducts = Product::withSum(['orderItems as total_sold' => function ($query) {
+            $query->whereHas('order', fn ($q) => $q->where('status', Order::STATUS_COMPLETED));
         }], 'quantity')
-        ->orderByDesc('total_sold')
-        ->take(5)
-        ->get();
-        
+            ->orderByDesc('total_sold')
+            ->take(5)
+            ->get();
+
         foreach ($topProducts as $idx => $product) {
             $rank = $idx + 1;
             $sold = $product->total_sold ?? 0;
             $this->command->line("  {$rank}. {$product->name}: {$sold} units");
         }
-        
+
         // Category sales summary
         $this->command->newLine();
         $this->command->info('Sales by Category:');
         foreach ($categories as $category) {
             $productIds = $category->products->pluck('id');
             $totalSold = OrderItem::whereIn('product_id', $productIds)
-                ->whereHas('order', fn($q) => $q->where('status', Order::STATUS_COMPLETED))
+                ->whereHas('order', fn ($q) => $q->where('status', Order::STATUS_COMPLETED))
                 ->sum('quantity');
             $totalRevenue = OrderItem::whereIn('product_id', $productIds)
-                ->whereHas('order', fn($q) => $q->where('status', Order::STATUS_COMPLETED))
+                ->whereHas('order', fn ($q) => $q->where('status', Order::STATUS_COMPLETED))
                 ->sum('subtotal');
-            $this->command->line("  - {$category->name}: {$totalSold} units, RM" . number_format($totalRevenue, 2));
+            $this->command->line("  - {$category->name}: {$totalSold} units, RM".number_format($totalRevenue, 2));
         }
-        
+
         $this->command->newLine();
     }
 
@@ -432,7 +449,7 @@ class OrderSeeder extends Seeder
                 [
                     'name' => $customer['name'],
                     'email' => $customer['email'],
-                    'mobile' => '01' . rand(10000000, 99999999),
+                    'mobile' => '01'.rand(10000000, 99999999),
                     'password' => Hash::make('password123'),
                     'utype' => 'USR',
                     'created_at' => Carbon::now()->subDays(rand(30, 365)),

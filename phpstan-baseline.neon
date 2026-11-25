@@ -1,0 +1,145 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:addMedia\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Console/Commands/BackfillMediaLibrary.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getMedia\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Console/Commands/BackfillMediaLibrary.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/AdminController.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/SocialAuthController.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of static method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\User\>\:\:firstOrCreate\(\) expects array\<string, mixed\>, array\<int, string\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/Test.php
+
+		-
+			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/FeedbackController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\Relation\<\*, \*, \*\>\:\:visible\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/HomeController.php
+
+		-
+			message: '#^Relation ''products'' is not found in App\\Models\\Category model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/HomeController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/OrderController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Order\:\:\$completed_orders\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StatistikController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Order\:\:\$total_revenue\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/StatistikController.php
+
+		-
+			message: '#^Relation ''products'' is not found in App\\Models\\Category model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:nonQueued\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/Brand.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:nonQueued\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: '#^Match arm comparison between ''praise'' and ''praise'' is always true\.$#'
+			identifier: match.alwaysTrue
+			count: 1
+			path: app/Models/CustomerFeedback.php
+
+		-
+			message: '#^Match arm comparison between ''cancelled''\|''completed''\|''new''\|''pending''\|''processing'' and ''paid'' is always false\.$#'
+			identifier: match.alwaysFalse
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: '#^Match arm comparison between ''cancelled''\|''completed''\|''new''\|''pending''\|''processing'' and ''pending_payment'' is always false\.$#'
+			identifier: match.alwaysFalse
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: '#^Match arm comparison between ''cancelled''\|''completed''\|''new''\|''pending''\|''processing'' and ''ready_for_pickup'' is always false\.$#'
+			identifier: match.alwaysFalse
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: '#^Match arm comparison between ''card''\|''ewallet''\|''fpx'' and ''qr_transfer'' is always false\.$#'
+			identifier: match.alwaysFalse
+			count: 1
+			path: app/Models/Payment.php
+
+		-
+			message: '#^Match arm comparison between ''refunded'' and ''refunded'' is always true\.$#'
+			identifier: match.alwaysTrue
+			count: 1
+			path: app/Models/Payment.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:nonQueued\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Models/Product.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany\:\:completed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Notifications/NewOrderPlaced.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quantity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Notifications/NewOrderPlaced.php

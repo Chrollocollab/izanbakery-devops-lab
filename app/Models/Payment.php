@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -42,7 +43,7 @@ class Payment extends Model implements HasMedia
     public function getReceiptUrlAttribute(): ?string
     {
         return $this->getFirstMediaUrl('receipt') ?: ($this->receipt_path
-            ? asset('uploads/receipts/' . $this->receipt_path)
+            ? asset('uploads/receipts/'.$this->receipt_path)
             : null);
     }
 
@@ -66,7 +67,7 @@ class Payment extends Model implements HasMedia
         }
 
         return $this->receipt_path
-            ? \Illuminate\Support\Str::endsWith(strtolower($this->receipt_path), '.pdf')
+            ? Str::endsWith(strtolower($this->receipt_path), '.pdf')
             : false;
     }
 
@@ -112,7 +113,7 @@ class Payment extends Model implements HasMedia
      */
     public function getStatusBadgeAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'bg-warning',
             'completed' => 'bg-success',
             'failed' => 'bg-danger',
@@ -126,7 +127,7 @@ class Payment extends Model implements HasMedia
      */
     public function getMethodLabelAttribute(): string
     {
-        return match($this->method) {
+        return match ($this->method) {
             'cash' => 'Cash on Delivery',
             'qr_transfer' => 'QR Transfer',
             default => ucfirst($this->method),

@@ -12,7 +12,7 @@ return new class extends Migration
     {
         // Drop the old constraint first so the remap below isn't blocked by
         // it still only allowing the pre-existing method values.
-        DB::statement("ALTER TABLE payments DROP CONSTRAINT IF EXISTS payments_method_check");
+        DB::statement('ALTER TABLE payments DROP CONSTRAINT IF EXISTS payments_method_check');
 
         // fpx/card/ewallet were never actually offered at checkout — remap to
         // qr_transfer, the only online method the storefront supports.
@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE payments DROP CONSTRAINT IF EXISTS payments_method_check");
+        DB::statement('ALTER TABLE payments DROP CONSTRAINT IF EXISTS payments_method_check');
         DB::statement("ALTER TABLE payments ADD CONSTRAINT payments_method_check CHECK (method IN ('fpx', 'card', 'cash', 'ewallet'))");
     }
 };

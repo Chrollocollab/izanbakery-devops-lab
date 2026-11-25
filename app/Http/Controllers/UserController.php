@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Product;
 
 class UserController extends Controller
 {
@@ -15,12 +14,12 @@ class UserController extends Controller
             ->orderBy('created_at', 'DESC')
             ->take(12)
             ->get();
-        
-        $categories = Category::with(['products' => function($query) {
+
+        $categories = Category::with(['products' => function ($query) {
             $query->where('stock_status', 'instock')
-                  ->orderBy('created_at', 'DESC');
+                ->orderBy('created_at', 'DESC');
         }])->get();
-            
+
         return view('user.index', compact('products', 'categories'));
     }
 }

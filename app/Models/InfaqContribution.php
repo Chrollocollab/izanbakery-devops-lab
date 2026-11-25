@@ -13,10 +13,13 @@ class InfaqContribution extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     const STATUS_PENDING = 'pending';
+
     const STATUS_VERIFIED = 'verified';
+
     const STATUS_REJECTED = 'rejected';
 
     const SOURCE_ONLINE = 'online';
+
     const SOURCE_MANUAL = 'manual';
 
     protected $fillable = [

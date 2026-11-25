@@ -35,7 +35,7 @@ class Product extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'featured'   => 'boolean',
+        'featured' => 'boolean',
         'is_visible' => 'boolean',
     ];
 
@@ -71,7 +71,7 @@ class Product extends Model implements HasMedia
     public function getTotalSoldAttribute(): int
     {
         return $this->orderItems()
-            ->whereHas('order', fn($q) => $q->where('status', 'completed'))
+            ->whereHas('order', fn ($q) => $q->where('status', 'completed'))
             ->sum('quantity');
     }
 
@@ -81,7 +81,7 @@ class Product extends Model implements HasMedia
     public function getTotalRevenueAttribute(): float
     {
         return $this->orderItems()
-            ->whereHas('order', fn($q) => $q->where('status', 'completed'))
+            ->whereHas('order', fn ($q) => $q->where('status', 'completed'))
             ->sum('subtotal');
     }
 
