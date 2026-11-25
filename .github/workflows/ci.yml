@@ -74,5 +74,8 @@ jobs:
       # Fail on bad code style, without changing files
       - run: vendor/bin/pint --test
 
+      # Find bugs without running the code
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
       # Run all tests against Postgres
       - run: php artisan test
