@@ -125,3 +125,83 @@ jobs:
           tags: |
             ghcr.io/chrollocollab/labapp-web:${{ github.sha }}
             ghcr.io/chrollocollab/labapp-web:latest
+  # ----- deploy job -----
+
+  deploy:
+    # Only after the images are pushed; skipped if build is skipped (pull requests)
+    needs: build
+    # Same main-only rule as build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    # Kill a hung deploy instead of holding the lock for hours
+    timeout-minutes: 15
+    # One deploy at a time; never kill a deploy that is half-way through
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      # Lets the server pull private images with this job's token
+      packages: read
+      # Lets the job ask GitHub for an OIDC token (the AWS role trusts it)
+      id-token: write
+    env:
+      TARGET: ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}
+      SG_ID: ${{ vars.AWS_SG_ID }}
+
+    steps:
+      # Needed for compose.yaml and deploy/deploy.sh
+      - uses: actions/checkout@v7
+
+      # Swap the OIDC token for temporary AWS credentials
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ap-southeast-2
+
+      # Write the CI key and the pinned host key; the secret goes in through env, not the script text
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ vars.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # The runner's public IP can differ every run: look it up and allow only that one (/32)
+      - name: Open port 22 for this runner
+        run: |
+          IP="$(curl -fsS --max-time 10 --retry 3 https://checkip.amazonaws.com)"
+          [[ "$IP" =~ ^[0-9.]+$ ]] || { echo "Bad IP: $IP"; exit 1; }
+          # Save the IP first, so the close step knows it even if the next line fails
+          echo "RUNNER_IP=$IP" >> "$GITHUB_ENV"
+          aws ec2 authorize-security-group-ingress --group-id "$SG_ID" \
+            --protocol tcp --port 22 --cidr "$IP/32" > /dev/null
+
+      # Send the two files the server needs from this commit
+      - name: Copy files
+        run: scp -o BatchMode=yes -o ConnectTimeout=20 compose.yaml deploy/deploy.sh "$TARGET:/opt/labapp/"
+
+      # The token goes in over stdin, so it never shows in the server's process list
+      - name: Log in to GHCR on the server
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: printf '%s' "$GHCR_TOKEN" | ssh -o BatchMode=yes "$TARGET" "docker login ghcr.io -u '${{ github.actor }}' --password-stdin"
+
+      # ServerAlive keeps the quiet connection open; exit 1 from the script makes this step red
+      - name: Deploy
+        run: ssh -o BatchMode=yes -o ServerAliveInterval=15 "$TARGET" "bash /opt/labapp/deploy.sh ${{ github.sha }}"
+
+      # always() = run even if a step above failed
+      - name: Log out of GHCR on the server
+        if: always() && env.RUNNER_IP != ''
+        run: ssh -o BatchMode=yes -o ConnectTimeout=20 "$TARGET" "docker logout ghcr.io" || true
+
+      # Last step: close the door again, pass or fail
+      - name: Close port 22
+        if: always() && env.RUNNER_IP != ''
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id "$SG_ID" \
+            --protocol tcp --port 22 --cidr "$RUNNER_IP/32" > /dev/null
