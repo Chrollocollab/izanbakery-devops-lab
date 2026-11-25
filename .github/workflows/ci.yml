@@ -1,0 +1,26 @@
+# Name shown in the Actions tab
+name: CI
+
+# Run on pushes to main and on every pull request
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: the job's token can only read the code
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    # Fixed version, because "latest" can change under you
+    runs-on: ubuntu-24.04
+    steps:
+      # Copy your pushed code into the runner
+      - uses: actions/checkout@v5
+
+      # Show the files, including hidden ones
+      - run: ls -a
+
+      # Report whether vendor/ exists
+      - run: test -d vendor && echo "vendor exists" || echo "vendor missing"
