@@ -79,3 +79,49 @@ jobs:
 
       # Run all tests against Postgres
       - run: php artisan test
+
+build:
+    # Wait for the test job; skip this job if tests fail
+    needs: test
+    # Only a push to main builds images, never a pull request
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Native arm64 runner, same CPU type as the EC2
+    runs-on: ubuntu-24.04-arm
+    # Only this job may push packages
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # Copy the pushed code
+      - uses: actions/checkout@v7
+
+      # Docker's modern builder
+      - uses: docker/setup-buildx-action@v4
+
+      # Log in to GHCR with the job's own temporary token
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # PHP image: the "final" stage, tagged with this commit and latest
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          target: final
+          push: true
+          tags: |
+            ghcr.io/chrollocollab/labapp-app:${{ github.sha }}
+            ghcr.io/chrollocollab/labapp-app:latest
+
+      # Nginx image: the "web" stage, same two tags
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          target: web
+          push: true
+          tags: |
+            ghcr.io/chrollocollab/labapp-web:${{ github.sha }}
+            ghcr.io/chrollocollab/labapp-web:latest
