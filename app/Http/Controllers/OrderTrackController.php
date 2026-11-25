@@ -24,7 +24,7 @@ class OrderTrackController extends Controller
     {
         $validated = $request->validate([
             'order_number' => 'required|string|max:50',
-            'email'        => 'required|email|max:255',
+            'email' => 'required|email|max:255',
         ]);
 
         $order = Order::with(['items', 'payment'])

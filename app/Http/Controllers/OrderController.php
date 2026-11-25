@@ -56,16 +56,16 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'              => 'required|string|max:255',
-            'phone'             => 'required|string|max:20',
-            'address'           => 'required|string',
-            'notes'             => 'nullable|string',
-            'status'            => 'required|in:' . implode(',', array_keys(Order::getStatuses())),
-            'has_delivery'      => 'required|in:yes,no',
-            'delivery_charge'   => 'nullable|numeric|min:0',
-            'items'             => 'required|array|min:1',
-            'items.*.product_id'=> 'required|exists:products,id',
-            'items.*.quantity'  => 'required|integer|min:1',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
+            'notes' => 'nullable|string',
+            'status' => 'required|in:'.implode(',', array_keys(Order::getStatuses())),
+            'has_delivery' => 'required|in:yes,no',
+            'delivery_charge' => 'nullable|numeric|min:0',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
         ]);
 
         $deliveryCharge = $request->has_delivery === 'yes'
@@ -84,11 +84,11 @@ class OrderController extends Controller
             $subtotal += $lineSubtotal;
 
             $orderItems[] = [
-                'product'      => $product,
+                'product' => $product,
                 'product_name' => $product->name,
-                'price'        => $price,
-                'quantity'     => $qty,
-                'subtotal'     => $lineSubtotal,
+                'price' => $price,
+                'quantity' => $qty,
+                'subtotal' => $lineSubtotal,
             ];
         }
 
@@ -96,32 +96,32 @@ class OrderController extends Controller
 
         $order = Order::create([
             'order_number' => Order::generateOrderNumber(),
-            'status'       => $request->status,
-            'name'         => $request->name,
-            'phone'        => $request->phone,
-            'address'      => $request->address,
-            'notes'        => $request->notes,
-            'subtotal'     => $subtotal,
-            'shipping'     => $deliveryCharge,
-            'discount'     => 0,
-            'tax'          => 0,
-            'total'        => $total,
+            'status' => $request->status,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'notes' => $request->notes,
+            'subtotal' => $subtotal,
+            'shipping' => $deliveryCharge,
+            'discount' => 0,
+            'tax' => 0,
+            'total' => $total,
         ]);
 
         foreach ($orderItems as $item) {
             OrderItem::create([
-                'order_id'     => $order->id,
-                'product_id'   => $item['product']->id,
+                'order_id' => $order->id,
+                'product_id' => $item['product']->id,
                 'product_name' => $item['product_name'],
-                'price'        => $item['price'],
-                'quantity'     => $item['quantity'],
-                'subtotal'     => $item['subtotal'],
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['subtotal'],
             ]);
         }
 
         return redirect()
             ->route('admin.order.show', $order->id)
-            ->with('success', 'Order ' . $order->order_number . ' created successfully.');
+            ->with('success', 'Order '.$order->order_number.' created successfully.');
     }
 
     /**
@@ -141,7 +141,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status'       => 'required|in:' . implode(',', array_keys(Order::getStatuses())),
+            'status' => 'required|in:'.implode(',', array_keys(Order::getStatuses())),
             'status_label' => 'nullable|string|max:255',
         ]);
 
@@ -162,16 +162,16 @@ class OrderController extends Controller
         // Manually-created orders may have no payment record at all — nothing to sync then.
         if ($request->status === Order::STATUS_PAID && $order->payment && $order->payment->status !== 'completed') {
             $order->payment->update([
-                'status'  => 'completed',
+                'status' => 'completed',
                 'paid_at' => now(),
             ]);
         }
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
-                'success'     => true,
-                'message'     => 'Order status updated successfully.',
-                'status'      => $order->status,
+                'success' => true,
+                'message' => 'Order status updated successfully.',
+                'status' => $order->status,
                 'status_name' => $order->status_name,
             ]);
         }
@@ -198,7 +198,7 @@ class OrderController extends Controller
         }
 
         $order->payment->update([
-            'status'  => 'completed',
+            'status' => 'completed',
             'paid_at' => now(),
         ]);
 
@@ -232,6 +232,6 @@ class OrderController extends Controller
 
         return redirect()
             ->route('admin.orders')
-            ->with('success', 'Order ' . $order->order_number . ' has been deleted.');
+            ->with('success', 'Order '.$order->order_number.' has been deleted.');
     }
 }

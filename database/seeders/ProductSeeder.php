@@ -6,7 +6,6 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -203,8 +202,8 @@ class ProductSeeder extends Seeder
         // Photos available in public/assets/images/products, keyed by product slug.
         $productImages = [
             'kek-pisang-original' => 'kek-pisang-original.JPG',
-            'kaswi-pandan'        => 'kaswi.jpg',
-            'popia-sira'          => 'popiaSira.jpeg',
+            'kaswi-pandan' => 'kaswi.jpg',
+            'popia-sira' => 'popiaSira.jpeg',
         ];
 
         foreach ($products as $productData) {
@@ -213,7 +212,7 @@ class ProductSeeder extends Seeder
 
             $productData['category_id'] = $category ? $category->id : null;
             $productData['brand_id'] = $brand->id;
-            $productData['image'] = $productData['slug'] . '.jpg';
+            $productData['image'] = $productData['slug'].'.jpg';
 
             $product = Product::firstOrCreate(
                 ['slug' => $productData['slug']],
@@ -221,7 +220,7 @@ class ProductSeeder extends Seeder
             );
 
             if (isset($productImages[$product->slug]) && $product->getMedia('product')->isEmpty()) {
-                $imagePath = public_path('assets/images/products/' . $productImages[$product->slug]);
+                $imagePath = public_path('assets/images/products/'.$productImages[$product->slug]);
 
                 if (file_exists($imagePath)) {
                     $product->addMedia($imagePath)

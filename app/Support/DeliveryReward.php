@@ -40,21 +40,21 @@ class DeliveryReward
         foreach (self::TIERS as $tier) {
             if ($subtotal >= $tier['min']) {
                 return [
-                    'label'      => $tier['label'],
-                    'discount'   => $tier['discount'],
-                    'free'       => $tier['discount'] === null,
+                    'label' => $tier['label'],
+                    'discount' => $tier['discount'],
+                    'free' => $tier['discount'] === null,
                     'has_reward' => true,
-                    'min'        => $tier['min'],
+                    'min' => $tier['min'],
                 ];
             }
         }
 
         return [
-            'label'      => self::NO_REWARD_LABEL,
-            'discount'   => 0,
-            'free'       => false,
+            'label' => self::NO_REWARD_LABEL,
+            'discount' => 0,
+            'free' => false,
             'has_reward' => false,
-            'min'        => null,
+            'min' => null,
         ];
     }
 

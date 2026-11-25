@@ -21,7 +21,7 @@ class CartFlowTest extends TestCase
         // Remove any proof-of-payment files created during the test.
         Payment::all()->each(function (Payment $payment) {
             if ($payment->receipt_path) {
-                File::delete(public_path('uploads/receipts/' . $payment->receipt_path));
+                File::delete(public_path('uploads/receipts/'.$payment->receipt_path));
             }
         });
 
@@ -36,13 +36,13 @@ class CartFlowTest extends TestCase
         $i++;
 
         return Product::create(array_merge([
-            'name'          => 'Test Cake ' . $i,
-            'slug'          => 'test-cake-' . $i,
-            'description'   => 'A delicious test cake.',
+            'name' => 'Test Cake '.$i,
+            'slug' => 'test-cake-'.$i,
+            'description' => 'A delicious test cake.',
             'regular_price' => 20.00,
-            'sale_price'    => null,
-            'SKU'           => 'SKU-' . $i,
-            'stock_status'  => 'instock',
+            'sale_price' => null,
+            'SKU' => 'SKU-'.$i,
+            'stock_status' => 'instock',
         ], $overrides));
     }
 
@@ -62,7 +62,7 @@ class CartFlowTest extends TestCase
         $product = $this->makeProduct();
 
         $response = $this->post(route('cart.add'), [
-            'id'       => $product->id,
+            'id' => $product->id,
             'quantity' => 2,
         ]);
 
@@ -92,10 +92,10 @@ class CartFlowTest extends TestCase
         $product = $this->makeProduct(['regular_price' => 50.00]);
 
         $this->post(route('cart.add'), [
-            'id'       => $product->id,
+            'id' => $product->id,
             'quantity' => 1,
-            'price'    => 1, // tampered
-            'name'     => 'Free Cake',
+            'price' => 1, // tampered
+            'name' => 'Free Cake',
         ]);
 
         $row = Cart::instance('cart')->content()->first();
@@ -173,12 +173,12 @@ class CartFlowTest extends TestCase
         $this->post(route('cart.add'), ['id' => $product->id, 'quantity' => 2]);
 
         $response = $this->post(route('cart.place-order'), [
-            'full_name'        => 'Wan Amirul',
-            'phone'            => '012-3456789',
-            'email'            => 'wan@example.com',
+            'full_name' => 'Wan Amirul',
+            'phone' => '0123456789',
+            'email' => 'wan@example.com',
             'fulfillment_type' => 'pickup',
-            'pickup_date'      => '2026-06-25',
-            'pickup_time'      => '09:00',
+            'pickup_date' => now()->addDay()->toDateString(),
+            'pickup_time' => '09:00',
             'proof_of_payment' => UploadedFile::fake()->image('receipt.png'),
         ]);
 
@@ -196,7 +196,7 @@ class CartFlowTest extends TestCase
         $this->assertSame('pending', $order->payment->status);
         $this->assertNull($order->payment->paid_at);
         $this->assertNotNull($order->payment->receipt_path);
-        $this->assertFileExists(public_path('uploads/receipts/' . $order->payment->receipt_path));
+        $this->assertFileExists(public_path('uploads/receipts/'.$order->payment->receipt_path));
 
         // Cart is emptied after a successful order.
         $this->assertSame(0, Cart::instance('cart')->content()->count());
@@ -209,12 +209,12 @@ class CartFlowTest extends TestCase
         $this->post(route('cart.add'), ['id' => $product->id, 'quantity' => 1]);
 
         $response = $this->from(route('cart.checkout'))->post(route('cart.place-order'), [
-            'full_name'        => 'Wan Amirul',
-            'phone'            => '012-3456789',
-            'email'            => 'wan@example.com',
+            'full_name' => 'Wan Amirul',
+            'phone' => '0123456789',
+            'email' => 'wan@example.com',
             'fulfillment_type' => 'pickup',
-            'pickup_date'      => '2026-06-25',
-            'pickup_time'      => '09:00',
+            'pickup_date' => now()->addDay()->toDateString(),
+            'pickup_time' => '09:00',
             'proof_of_payment' => UploadedFile::fake()->create('malware.exe', 10, 'application/x-msdownload'),
         ]);
 
@@ -229,12 +229,12 @@ class CartFlowTest extends TestCase
         $this->post(route('cart.add'), ['id' => $product->id, 'quantity' => 1]);
 
         $response = $this->from(route('cart.checkout'))->post(route('cart.place-order'), [
-            'full_name'        => 'Wan Amirul',
-            'phone'            => '012-3456789',
-            'email'            => 'wan@example.com',
+            'full_name' => 'Wan Amirul',
+            'phone' => '0123456789',
+            'email' => 'wan@example.com',
             'fulfillment_type' => 'delivery',
-            'pickup_date'      => '2026-06-25',
-            'pickup_time'      => '09:00',
+            'pickup_date' => now()->addDay()->toDateString(),
+            'pickup_time' => '09:00',
             'proof_of_payment' => UploadedFile::fake()->image('receipt.png'),
         ]);
 
@@ -246,12 +246,12 @@ class CartFlowTest extends TestCase
     public function test_place_order_with_empty_cart_redirects(): void
     {
         $response = $this->post(route('cart.place-order'), [
-            'full_name'        => 'Wan Amirul',
-            'phone'            => '012-3456789',
-            'email'            => 'wan@example.com',
+            'full_name' => 'Wan Amirul',
+            'phone' => '0123456789',
+            'email' => 'wan@example.com',
             'fulfillment_type' => 'pickup',
-            'pickup_date'      => '2026-06-25',
-            'pickup_time'      => '09:00',
+            'pickup_date' => now()->addDay()->toDateString(),
+            'pickup_time' => '09:00',
             'proof_of_payment' => UploadedFile::fake()->image('receipt.png'),
         ]);
 
@@ -319,12 +319,12 @@ class CartFlowTest extends TestCase
         $this->post(route('cart.add'), ['id' => $product->id, 'quantity' => 1]);
 
         $this->post(route('cart.place-order'), [
-            'full_name'        => 'Wan Amirul',
-            'phone'            => '012-3456789',
-            'email'            => 'wan@example.com',
+            'full_name' => 'Wan Amirul',
+            'phone' => '0123456789',
+            'email' => 'wan@example.com',
             'fulfillment_type' => 'pickup',
-            'pickup_date'      => '2026-06-25',
-            'pickup_time'      => '09:00',
+            'pickup_date' => now()->addDay()->toDateString(),
+            'pickup_time' => '09:00',
             'proof_of_payment' => UploadedFile::fake()->image('receipt.png'),
         ]);
 

@@ -10,7 +10,6 @@ class MyOrderController extends Controller
 {
     use GeneratesReceiptPdf;
 
-
     /**
      * List the authenticated user's own orders.
      */

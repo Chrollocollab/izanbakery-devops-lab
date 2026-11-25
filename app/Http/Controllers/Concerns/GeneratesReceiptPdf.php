@@ -19,9 +19,9 @@ trait GeneratesReceiptPdf
         $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4']);
         $mpdf->WriteHTML($html);
 
-        return response($mpdf->Output($order->order_number . '-receipt.pdf', Destination::STRING_RETURN), 200, [
-            'Content-Type'        => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $order->order_number . '-receipt.pdf"',
+        return response($mpdf->Output($order->order_number.'-receipt.pdf', Destination::STRING_RETURN), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$order->order_number.'-receipt.pdf"',
         ]);
     }
 }

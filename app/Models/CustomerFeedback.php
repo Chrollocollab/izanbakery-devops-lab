@@ -46,7 +46,7 @@ class CustomerFeedback extends Model
      */
     public function getTypeBadgeClassAttribute(): string
     {
-        return match($this->type) {
+        return match ($this->type) {
             'suggestion' => 'badge-primary',
             'complaint' => 'badge-danger',
             'question' => 'badge-info',

@@ -16,14 +16,13 @@ class FeedbackController extends Controller
         $feedbacks = CustomerFeedback::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-        
+
         return view('user.customer-feedback', compact('feedbacks'));
     }
 
     /**
      * Store a new customer feedback.
      */
-
     public function store(Request $request)
     {
         $validated = $request->validate([

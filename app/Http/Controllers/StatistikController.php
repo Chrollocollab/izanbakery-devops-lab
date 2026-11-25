@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
@@ -41,10 +40,10 @@ class StatistikController extends Controller
             COUNT(CASE WHEN created_at >= ? THEN 1 END) as orders_weekly,
             COUNT(CASE WHEN created_at >= ? THEN 1 END) as orders_monthly
         ", [$today, $startOfWeek, $startOfMonth, $today, $startOfWeek, $startOfMonth])
-        ->first();
+            ->first();
 
         // === SINGLE QUERY: Revenue trend (last 30 days) ===
-        $revenueTrendRaw = Order::selectRaw("DATE(created_at) as date, SUM(total) as revenue")
+        $revenueTrendRaw = Order::selectRaw('DATE(created_at) as date, SUM(total) as revenue')
             ->where('status', 'completed')
             ->where('created_at', '>=', $thirtyDaysAgo)
             ->groupBy(DB::raw('DATE(created_at)'))
@@ -63,7 +62,7 @@ class StatistikController extends Controller
         }
 
         // === SINGLE QUERY: Order status distribution ===
-        $orderStatusDistribution = Order::selectRaw("status, COUNT(*) as count")
+        $orderStatusDistribution = Order::selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
@@ -85,9 +84,9 @@ class StatistikController extends Controller
         $categoryPerformance = Category::select('categories.id', 'categories.name')
             ->leftJoin('products', 'categories.id', '=', 'products.category_id')
             ->leftJoin('order_items', 'products.id', '=', 'order_items.product_id')
-            ->leftJoin('orders', function($join) {
+            ->leftJoin('orders', function ($join) {
                 $join->on('order_items.order_id', '=', 'orders.id')
-                     ->where('orders.status', '=', 'completed');
+                    ->where('orders.status', '=', 'completed');
             })
             ->groupBy('categories.id', 'categories.name')
             ->selectRaw('COALESCE(SUM(order_items.quantity), 0) as total_sold')
@@ -130,7 +129,7 @@ class StatistikController extends Controller
         ", [$today])->first();
 
         // === SINGLE QUERY: Payment methods breakdown ===
-        $paymentMethods = Payment::selectRaw("method, COUNT(*) as count, SUM(amount) as total")
+        $paymentMethods = Payment::selectRaw('method, COUNT(*) as count, SUM(amount) as total')
             ->where('status', 'completed')
             ->groupBy('method')
             ->get();
@@ -144,7 +143,7 @@ class StatistikController extends Controller
 
         // === Build response arrays ===
         $completedCount = $orderStats->completed_orders ?: 1;
-        
+
         $salesRevenue = [
             'today' => $orderStats->today_revenue ?? 0,
             'weekly' => $orderStats->weekly_revenue ?? 0,
@@ -181,8 +180,8 @@ class StatistikController extends Controller
             'new' => $customerStats->new_customers ?? 0,
             'returning' => $returningCustomers,
             'top_customers' => $topCustomers,
-            'purchase_frequency' => $customersWithOrders > 0 
-                ? round(($orderStats->total_orders ?? 0) / $customersWithOrders, 2) 
+            'purchase_frequency' => $customersWithOrders > 0
+                ? round(($orderStats->total_orders ?? 0) / $customersWithOrders, 2)
                 : 0,
         ];
 
@@ -218,7 +217,7 @@ class StatistikController extends Controller
         switch ($type) {
             case 'revenue':
                 $thirtyDaysAgo = Carbon::now()->subDays(30);
-                $revenueTrendRaw = Order::selectRaw("DATE(created_at) as date, SUM(total) as revenue")
+                $revenueTrendRaw = Order::selectRaw('DATE(created_at) as date, SUM(total) as revenue')
                     ->where('status', 'completed')
                     ->where('created_at', '>=', $thirtyDaysAgo)
                     ->groupBy(DB::raw('DATE(created_at)'))
@@ -234,11 +233,12 @@ class StatistikController extends Controller
                         'revenue' => (float) ($revenueTrendRaw[$date] ?? 0),
                     ];
                 }
+
                 return response()->json($trend);
 
             case 'orders':
                 return response()->json(
-                    Order::selectRaw("status, COUNT(*) as count")
+                    Order::selectRaw('status, COUNT(*) as count')
                         ->groupBy('status')
                         ->pluck('count', 'status')
                         ->toArray()

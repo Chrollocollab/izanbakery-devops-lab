@@ -13,22 +13,19 @@ class AuthAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check())
-        {
-            if(Auth::user()->utype==='ADM')
-            {
+        if (Auth::check()) {
+            if (Auth::user()->utype === 'ADM') {
                 return $next($request);
-            }
-            else{
+            } else {
                 Session::flush();
+
                 return redirect()->route('login');
             }
-        }
-        else{
+        } else {
             return redirect()->route('login');
         }
     }

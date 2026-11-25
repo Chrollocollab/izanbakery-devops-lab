@@ -14,9 +14,13 @@ class Order extends Model
 
     // Order status constants
     const STATUS_PENDING_PAYMENT = 'pending_payment';
+
     const STATUS_PAID = 'paid';
+
     const STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
+
     const STATUS_COMPLETED = 'completed';
+
     const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
@@ -91,7 +95,7 @@ class Order extends Model
      */
     public function getStatusBadgeClassAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_PENDING_PAYMENT => 'badge-warning',
             self::STATUS_PAID => 'badge-success',
             self::STATUS_READY_FOR_PICKUP => 'badge-info',
@@ -134,12 +138,12 @@ class Order extends Model
         $date = now()->format('Ymd');
         $random = strtoupper(bin2hex(random_bytes(4)));
         $orderNumber = "{$prefix}-{$date}-{$random}";
-        
+
         while (static::where('order_number', $orderNumber)->exists()) {
             $random = strtoupper(bin2hex(random_bytes(4)));
             $orderNumber = "{$prefix}-{$date}-{$random}";
         }
-        
+
         return $orderNumber;
     }
 
@@ -148,14 +152,14 @@ class Order extends Model
      */
     public function scopeSearch($query, $search)
     {
-        return $query->where(function($q) use ($search) {
+        return $query->where(function ($q) use ($search) {
             $q->where('order_number', 'ILIKE', "%{$search}%")
-              ->orWhere('name', 'ILIKE', "%{$search}%")
-              ->orWhere('email', 'ILIKE', "%{$search}%")
-              ->orWhere('phone', 'ILIKE', "%{$search}%")
-              ->orWhereHas('items', function($itemQuery) use ($search) {
-                  $itemQuery->where('product_name', 'ILIKE', "%{$search}%");
-              });
+                ->orWhere('name', 'ILIKE', "%{$search}%")
+                ->orWhere('email', 'ILIKE', "%{$search}%")
+                ->orWhere('phone', 'ILIKE', "%{$search}%")
+                ->orWhereHas('items', function ($itemQuery) use ($search) {
+                    $itemQuery->where('product_name', 'ILIKE', "%{$search}%");
+                });
         });
     }
 

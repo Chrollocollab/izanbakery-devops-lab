@@ -33,8 +33,8 @@ abstract class TestCase extends BaseTestCase
         if (! in_array($database, self::ALLOWED_TEST_DATABASES, true)) {
             throw new RuntimeException(
                 "Refusing to run tests against database [{$database}]. "
-                . 'The test suite must use a dedicated test database (e.g. izanbakery_ecommerce_test). '
-                . 'If you hit this, clear cached config first: `php artisan config:clear`.'
+                .'The test suite must use a dedicated test database (e.g. izanbakery_ecommerce_test). '
+                .'If you hit this, clear cached config first: `php artisan config:clear`.'
             );
         }
     }
