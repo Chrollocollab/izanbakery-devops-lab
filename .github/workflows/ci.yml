@@ -115,6 +115,8 @@ jobs:
           tags: |
             ghcr.io/chrollocollab/labapp-app:${{ github.sha }}
             ghcr.io/chrollocollab/labapp-app:latest
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
 
       # Nginx image: the "web" stage, same two tags
       - uses: docker/build-push-action@v7
@@ -125,6 +127,9 @@ jobs:
           tags: |
             ghcr.io/chrollocollab/labapp-web:${{ github.sha }}
             ghcr.io/chrollocollab/labapp-web:latest
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
   # ----- deploy job -----
 
   deploy:
