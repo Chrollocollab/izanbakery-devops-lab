@@ -139,6 +139,10 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     # Kill a hung deploy instead of holding the lock for hours
+    # Pause for a required reviewer (Settings → Environments → production) before deploying
+    environment:
+      name: production
+      url: https://lab.izanbakery.com
     timeout-minutes: 15
     # One deploy at a time; never kill a deploy that is half-way through
     concurrency:
