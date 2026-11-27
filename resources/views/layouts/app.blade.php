@@ -459,7 +459,7 @@
         </address>
 
         <p class="bkr-footer__legal">
-            &copy;{{ date('Y') }} Izan's Bakery. {{ __('messages.footer.rights_reserved') }}
+            &copy;{{ date('Y') }} Izan's Bakery. {{ __('messages.footer.rights_reserved') }} . Deployed Via CI/CD
         </p>
     </footer>
 
